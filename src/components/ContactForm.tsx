@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle, Loader2, Linkedin, MessageSquare, Clock, ExternalLink, MailQuestion } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle, Loader2, Linkedin, MessageSquare, Clock, ExternalLink, MailQuestion, ShieldCheck } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import { sanitizeInput, validateEmail, checkSubmissionRateLimit, recordSubmission } from '../utils/security';
 
 interface ContactFormProps {
   onOpenWhatsApp?: () => void;
@@ -13,6 +14,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
     subject: '',
     message: ''
   });
+  const [honeypot, setHoneypot] = useState('');
 
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -25,19 +27,47 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
   };
 
   const getMailtoUrl = () => {
-    const subject = encodeURIComponent(formData.subject || `Message pour Aliou Mbow`);
-    const body = encodeURIComponent(
-      `Nom: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    const safeSubject = encodeURIComponent(sanitizeInput(formData.subject || `Message pour Aliou Mbow`, 100));
+    const safeBody = encodeURIComponent(
+      `Nom: ${sanitizeInput(formData.name, 80)}\nEmail: ${formData.email.trim()}\n\nMessage:\n${sanitizeInput(formData.message, 2000)}`
     );
-    return `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
+    return `mailto:${personalInfo.email}?subject=${safeSubject}&body=${safeBody}`;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+    // 1. Anti-Bot Honeypot Trap
+    if (honeypot.trim().length > 0) {
+      console.warn('[Sécurité] Tentative de soumission bot piégée par honeypot.');
+      setStatus('loading');
+      setTimeout(() => setStatus('success'), 600);
+      return;
+    }
+
+    // 2. Anti-Flood / Rate Limiting (25 seconds cooldown)
+    const rateCheck = checkSubmissionRateLimit('contact_form', 25);
+    if (!rateCheck.allowed) {
       setStatus('error');
-      setErrorMessage('Veuillez remplir tous les champs obligatoires.');
+      setErrorMessage(`Protection anti-spam active : veuillez patienter encore ${rateCheck.remainingSeconds}s avant d'envoyer un nouveau message.`);
+      return;
+    }
+
+    // 3. Input Validation & Sanitization
+    const cleanName = sanitizeInput(formData.name, 80);
+    const cleanEmail = formData.email.trim();
+    const cleanSubject = sanitizeInput(formData.subject, 120);
+    const cleanMessage = sanitizeInput(formData.message, 3000);
+
+    if (!cleanName || !cleanEmail || !cleanMessage) {
+      setStatus('error');
+      setErrorMessage('Veuillez remplir tous les champs obligatoires avec des valeurs valides.');
+      return;
+    }
+
+    if (!validateEmail(cleanEmail)) {
+      setStatus('error');
+      setErrorMessage('Veuillez renseigner une adresse email valide (ex: amadou@example.com).');
       return;
     }
 
@@ -53,18 +83,20 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          _subject: `[Portfolio Aliou Mbow] ${formData.subject || 'Nouveau message de contact'}`,
-          message: formData.message,
-          _replyto: formData.email,
-          _template: 'table'
+          name: cleanName,
+          email: cleanEmail,
+          _subject: `[Portfolio Aliou Mbow] ${cleanSubject || 'Nouveau message de contact'}`,
+          message: cleanMessage,
+          _replyto: cleanEmail,
+          _template: 'table',
+          _captcha: 'false'
         })
       });
 
       const data = await response.json().catch(() => ({}));
 
       if (response.ok && (data.success === 'true' || data.success === true || response.status === 200)) {
+        recordSubmission('contact_form');
         setStatus('success');
         setFormData({
           name: '',
@@ -74,12 +106,14 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
         });
       } else {
         // Fallback to mailto if submission endpoint is blocked
+        recordSubmission('contact_form');
         window.location.href = getMailtoUrl();
         setStatus('success');
       }
     } catch (err) {
       console.warn('Erreur envoi réseau, bascule mailto:', err);
       // Open mail client as reliable fallback
+      recordSubmission('contact_form');
       window.location.href = getMailtoUrl();
       setStatus('success');
     }
@@ -186,7 +220,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
                 <a
                   href={personalInfo.linkedin}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-sm font-semibold transition-all"
                 >
                   <Linkedin className="w-4 h-4 text-blue-400" />
@@ -226,6 +260,20 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* Invisible Honeypot Field to trap malicious bots */}
+                  <div className="hidden" aria-hidden="true">
+                    <label htmlFor="website-trap">Ne pas remplir ce champ si vous êtes humain :</label>
+                    <input
+                      id="website-trap"
+                      type="text"
+                      name="_bot_honey"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
+                  </div>
+
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="text-xl font-bold text-white">Envoyez-moi un message</h3>
                     <span className="text-[11px] text-slate-400">Reçu sur {personalInfo.email}</span>
@@ -247,6 +295,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
                         type="text"
                         name="name"
                         required
+                        maxLength={80}
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="Ex. Amadou Diop"
@@ -262,6 +311,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
                         type="email"
                         name="email"
                         required
+                        maxLength={120}
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="amadou@example.com"
@@ -277,6 +327,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
                     <input
                       type="text"
                       name="subject"
+                      maxLength={120}
                       value={formData.subject}
                       onChange={handleChange}
                       placeholder="Ex. Proposition d'opportunité / Projet MIO & Marketing"
@@ -291,6 +342,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
                     <textarea
                       name="message"
                       required
+                      maxLength={3000}
                       rows={5}
                       value={formData.message}
                       onChange={handleChange}
@@ -318,13 +370,17 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
                       )}
                     </button>
 
-                    <div className="flex items-center justify-center gap-4 text-xs text-slate-400 pt-1">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 pt-1">
+                      <div className="flex items-center gap-1.5 text-emerald-400 font-medium">
+                        <ShieldCheck className="w-4 h-4 shrink-0" />
+                        <span>Transmission sécurisée & anti-spam</span>
+                      </div>
                       <a
                         href={getMailtoUrl()}
                         className="text-slate-400 hover:text-blue-300 underline inline-flex items-center gap-1"
                       >
                         <MailQuestion className="w-3.5 h-3.5" />
-                        <span>Ouvrir dans mon application e-mail (Gmail / Mailto)</span>
+                        <span>Ouvrir dans mon logiciel de messagerie</span>
                       </a>
                     </div>
                   </div>

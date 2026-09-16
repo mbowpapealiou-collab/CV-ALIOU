@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, HardDrive, Folder, FileText, FileSpreadsheet, Database, ExternalLink, Download, Search, Check, Edit3, ChevronRight, Eye, ShieldCheck } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import { sanitizeSafeUrl, isValidDriveUrl, sanitizeInput } from '../utils/security';
 
 interface DriveFile {
   id: string;
@@ -220,9 +221,10 @@ export const DriveExplorerModal: React.FC<DriveExplorerModalProps> = ({
 
   const activeFolder = folders.find(f => f.id === selectedFolderId) || folders[0];
 
+  const cleanQuery = sanitizeInput(searchQuery, 80).toLowerCase();
   const filteredFiles = activeFolder.files.filter(f =>
-    f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    f.description.toLowerCase().includes(searchQuery.toLowerCase())
+    f.name.toLowerCase().includes(cleanQuery) ||
+    f.description.toLowerCase().includes(cleanQuery)
   );
 
   const getFileIcon = (type: DriveFile['type']) => {
@@ -241,9 +243,16 @@ export const DriveExplorerModal: React.FC<DriveExplorerModalProps> = ({
 
   const handleSaveUrl = (e: React.FormEvent) => {
     e.preventDefault();
-    if (tempUrl.trim()) {
-      setCustomDriveUrl(tempUrl.trim());
-      localStorage.setItem('aliou_drive_url', tempUrl.trim());
+    const clean = sanitizeSafeUrl(tempUrl.trim(), personalInfo.googleDriveProjectsUrl);
+    if (!isValidDriveUrl(clean)) {
+      alert("Sécurité : Le lien doit obligatoirement être une URL Google Drive sécurisée (commençant par https://drive.google.com/ ou https://docs.google.com/)");
+      return;
+    }
+    setCustomDriveUrl(clean);
+    try {
+      localStorage.setItem('aliou_drive_url', clean);
+    } catch {
+      // Ignore
     }
     setIsEditingUrl(false);
   };
@@ -304,7 +313,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
             <a
               href={customDriveUrl}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-xl transition-all shadow-md min-h-[40px]"
             >
               <span>Ouvrir sur Drive</span>
@@ -429,6 +438,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
                 <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
+                  maxLength={60}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Rechercher un fichier..."
@@ -501,7 +511,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
               <a
                 href={customDriveUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="text-blue-400 hover:text-blue-300 font-semibold inline-flex items-center gap-1"
               >
                 <span>Accéder au dossier en ligne complet</span>
@@ -568,7 +578,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
                 <a
                   href={customDriveUrl}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="flex-1 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-md"
                 >
                   <span>Ouvrir sur Drive</span>

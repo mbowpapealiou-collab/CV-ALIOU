@@ -7,7 +7,13 @@ export const DEFAULT_PHOTO = '/photo.jpg';
 export function getProfilePhoto(): string {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved && saved.startsWith('data:image')) {
+    // Security check: Only allow safe raster image data URLs (jpeg, png, webp)
+    if (
+      saved &&
+      (saved.startsWith('data:image/jpeg') ||
+       saved.startsWith('data:image/png') ||
+       saved.startsWith('data:image/webp'))
+    ) {
       return saved;
     }
   } catch (err) {
@@ -17,6 +23,16 @@ export function getProfilePhoto(): string {
 }
 
 export function saveProfilePhoto(dataUrl: string): void {
+  // Security validation: verify dataUrl is a genuine image dataUrl
+  if (
+    !dataUrl.startsWith('data:image/jpeg') &&
+    !dataUrl.startsWith('data:image/png') &&
+    !dataUrl.startsWith('data:image/webp')
+  ) {
+    console.error('[Sécurité] Format d\'image invalide ou suspect bloqué');
+    return;
+  }
+
   try {
     localStorage.setItem(STORAGE_KEY, dataUrl);
     window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: dataUrl }));
@@ -97,9 +113,19 @@ export function useProfilePhoto() {
       setIsCustom(newUrl !== DEFAULT_PHOTO);
     };
 
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY) {
+        const newUrl = getProfilePhoto();
+        setPhotoUrl(newUrl);
+        setIsCustom(newUrl !== DEFAULT_PHOTO);
+      }
+    };
+
     window.addEventListener(EVENT_NAME, handleUpdate);
+    window.addEventListener('storage', handleStorage);
     return () => {
       window.removeEventListener(EVENT_NAME, handleUpdate);
+      window.removeEventListener('storage', handleStorage);
     };
   }, []);
 

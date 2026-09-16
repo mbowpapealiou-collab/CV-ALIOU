@@ -109,7 +109,7 @@ export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose, onOpenWhatsAp
                 <a
                   href={personalInfo.linkedin}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-1.5 text-blue-400 hover:underline"
                 >
                   <Linkedin className="w-3.5 h-3.5" />

@@ -86,7 +86,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenWhatsApp })
           <a
             href={personalInfo.linkedin}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors flex items-center gap-1.5 text-sm font-medium"
             title="LinkedIn"
           >
@@ -154,7 +154,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenWhatsApp })
             <a
               href={personalInfo.linkedin}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-200 bg-slate-800 rounded-lg"
             >
               <Linkedin className="w-4 h-4 text-blue-400" />

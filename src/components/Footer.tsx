@@ -1,8 +1,11 @@
 import React from 'react';
 import { ArrowUp, Linkedin, Mail, HardDrive, Phone } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import { useProfilePhoto } from '../utils/photoStorage';
 
 export const Footer: React.FC = () => {
+  const { photoUrl } = useProfilePhoto();
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -12,12 +15,13 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           
-          {/* Logo & Name */}
+          {/* Logo & Name with synchronized photo */}
           <div className="flex items-center gap-3">
             <img
-              src="/photo.jpg"
+              src={photoUrl}
               alt="Aliou Mbow"
-              className="w-9 h-9 rounded-full object-cover object-top border border-blue-500/50"
+              className="w-10 h-10 rounded-full object-cover object-top border-2 border-blue-500/50 shadow-sm"
+              referrerPolicy="no-referrer"
             />
             <div>
               <span className="text-white font-semibold block text-sm">
@@ -39,7 +43,7 @@ export const Footer: React.FC = () => {
             <a
               href={personalInfo.googleDriveProjectsUrl}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
               title="Google Drive Projets"
             >
@@ -48,7 +52,7 @@ export const Footer: React.FC = () => {
             <a
               href={personalInfo.linkedin}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
               title="LinkedIn"
             >
@@ -57,7 +61,7 @@ export const Footer: React.FC = () => {
             <a
               href="https://wa.me/221783333175"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
               title="WhatsApp"
             >

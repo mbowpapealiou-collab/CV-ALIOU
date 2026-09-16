@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FolderGit2, ExternalLink, ArrowUpRight, HardDrive, Sparkles, FolderOpen, Edit3, Check, FolderSearch } from 'lucide-react';
 import { projectsData, personalInfo } from '../data/portfolioData';
 import { Project } from '../types';
+import { sanitizeSafeUrl, isValidDriveUrl } from '../utils/security';
 
 interface ProjectsProps {
   onOpenDriveModal?: (folderId?: string) => void;
@@ -35,9 +36,16 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenDriveModal }) => {
 
   const handleSaveDriveUrl = (e: React.FormEvent) => {
     e.preventDefault();
-    if (tempUrl.trim()) {
-      setCustomDriveUrl(tempUrl.trim());
-      localStorage.setItem('aliou_drive_url', tempUrl.trim());
+    const clean = sanitizeSafeUrl(tempUrl.trim(), personalInfo.googleDriveProjectsUrl);
+    if (!isValidDriveUrl(clean)) {
+      alert("Sécurité : Le lien doit obligatoirement être une URL Google Drive sécurisée (commençant par https://drive.google.com/ ou https://docs.google.com/)");
+      return;
+    }
+    setCustomDriveUrl(clean);
+    try {
+      localStorage.setItem('aliou_drive_url', clean);
+    } catch {
+      // Ignore
     }
     setIsEditingDrive(false);
   };
@@ -107,7 +115,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenDriveModal }) => {
                 <a
                   href={customDriveUrl}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors text-xs min-h-[44px]"
                   title="Ouvrir dans un nouvel onglet Google Drive"
                 >
@@ -246,7 +254,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenDriveModal }) => {
                     <a
                       href={project.driveUrl || customDriveUrl}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="inline-flex items-center justify-center gap-1 text-xs text-slate-300 hover:text-white p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors min-h-[38px] min-w-[38px]"
                       title="Ouvrir dans Google Drive Web"
                     >
