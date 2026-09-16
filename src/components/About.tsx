@@ -1,28 +1,28 @@
 import React from 'react';
-import { User, CheckCircle2, Award, Laptop, Clock, ShieldCheck } from 'lucide-react';
+import { User, CheckCircle2, Award, Briefcase, Users, TrendingUp, GraduationCap } from 'lucide-react';
 import { personalInfo, experiencesData } from '../data/portfolioData';
 
 export const About: React.FC = () => {
   const highlights = [
     {
-      title: "Architecture Propre & Scalable",
-      desc: "Code modulaire, typé avec rigueur en TypeScript et structuré pour la maintenabilité à long terme.",
-      icon: Laptop
+      title: "Management & Organisation",
+      desc: "Coordination d'équipes, optimisation des processus de gestion et rigueur organisationnelle appliquée aux structures d'entreprise.",
+      icon: Briefcase
     },
     {
-      title: "Maîtrise Base de Données & ORM",
-      desc: "Conception de schémas optimisés sous PostgreSQL et MongoDB avec Prisma ORM pour des requêtes rapides et sécurisées.",
-      icon: ShieldCheck
-    },
-    {
-      title: "Expérience Utilisateur Moderne",
-      desc: "Interfaces ultra-réactives au pixel près avec Tailwind CSS, Next.js App Router et transitions soignées.",
+      title: "Informatique de Gestion & Access",
+      desc: "Conception et structuration de bases de données relationnelles, requêtes multicritères, traitement analytique sous Excel et Access.",
       icon: Award
     },
     {
-      title: "Respect des Délais & Engagement",
-      desc: "Méthodologie Agile, communication transparente et itérations rapides avec déploiement continu.",
-      icon: Clock
+      title: "Marketing Digital & Réseaux",
+      desc: "Idéation de contenu, personal branding, community management et renforcement de l'impact numérique des organisations.",
+      icon: TrendingUp
+    },
+    {
+      title: "Leadership & Vie Associative",
+      desc: "Présidence et animation de commissions pédagogiques et sociales au sein de l'Université Iba Der Thiam de Thiès.",
+      icon: Users
     }
   ];
 
@@ -34,13 +34,13 @@ export const About: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-3">
             <User className="w-3.5 h-3.5" />
-            À PROPOS DE MOI
+            PROFIL & PARCOURS
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
-            Passionné par l'innovation logicielle et la création de valeur
+            Management Informatisé des Organisations & Stratégie Digitale
           </h2>
           <p className="mt-4 text-base text-slate-400 leading-relaxed">
-            Alliant sens du détail graphique et rigueur d'ingénierie backend, je transforme des idées complexes en produits web fluides, intuitifs et prêts pour la production.
+            Étudiant en 3ème année de Management Informatisé des Organisations (MIO) à l'Université Iba Der Thiam de Thiès. À la croisée de la gestion d'entreprise, des systèmes d'information et de la communication digitale, j'allie méthodologie, dynamisme commercial et esprit d'initiative.
           </p>
         </div>
 
@@ -51,7 +51,7 @@ export const About: React.FC = () => {
             return (
               <div
                 key={item.title}
-                className="p-6 rounded-2xl bg-slate-800/40 border border-slate-700/60 hover:border-slate-600 transition-all hover:-translate-y-1"
+                className="p-6 rounded-2xl bg-slate-800/40 border border-slate-700/60 hover:border-blue-500/40 transition-all hover:-translate-y-1 shadow-sm"
               >
                 <div className="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-4">
                   <Icon className="w-6 h-6" />
@@ -63,19 +63,61 @@ export const About: React.FC = () => {
           })}
         </div>
 
-        {/* Experience Timeline */}
+        {/* Formation & Objectif Professionnel */}
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-6 sm:p-8 rounded-2xl bg-slate-800/30 border border-slate-700/50">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
+                <GraduationCap className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-white">Formation Académique</h3>
+            </div>
+            <div className="space-y-4">
+              {personalInfo.education.map((edu, idx) => (
+                <div key={idx} className="pb-3 border-b border-slate-700/40 last:border-0 last:pb-0">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-semibold text-white text-base">{edu.degree}</h4>
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 font-medium border border-blue-500/20">
+                      {edu.year}
+                    </span>
+                  </div>
+                  <p className="text-sm text-slate-400 mt-1">{edu.school}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-blue-950/40 to-slate-800/40 border border-blue-800/40">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                <TrendingUp className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-white">Objectif Professionnel</h3>
+            </div>
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+              {personalInfo.objective}
+            </p>
+            <div className="mt-4 pt-4 border-t border-slate-700/50 flex flex-wrap gap-2 text-xs text-slate-300">
+              <span className="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700">Direction Administrative & Financière</span>
+              <span className="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700">Gestion de Projets</span>
+              <span className="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700">Audit & Organisation</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Experience / Engagements Timeline */}
         <div id="experience" className="mt-20 pt-16 border-t border-slate-800">
           <div className="text-center max-w-xl mx-auto mb-12">
-            <h3 className="text-2xl font-bold text-white">Parcours & Expériences</h3>
+            <h3 className="text-2xl sm:text-3xl font-bold text-white">Responsabilités & Engagements</h3>
             <p className="text-sm text-slate-400 mt-2">
-              Un cheminement orienté vers l'excellence technique et la livraison de solutions concrètes.
+              Expériences concrètes en gestion d'équipes, commissions universitaires et activités commerciales.
             </p>
           </div>
 
           <div className="max-w-3xl mx-auto space-y-8 relative before:absolute before:inset-0 before:left-3.5 sm:before:left-1/2 before:-translate-x-1/2 before:w-0.5 before:bg-slate-800">
             {experiencesData.map((exp, idx) => (
               <div
-                key={exp.period}
+                key={idx}
                 className="relative flex flex-col sm:flex-row items-start gap-6 group"
               >
                 {/* Center dot */}
@@ -110,3 +152,4 @@ export const About: React.FC = () => {
     </section>
   );
 };
+

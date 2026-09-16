@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, FileText, Send, Github, Linkedin, Mail } from 'lucide-react';
+import { Menu, X, Send, Linkedin, Mail, ExternalLink } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
 interface NavbarProps {
@@ -20,38 +20,47 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
 
   const navLinks = [
     { name: 'Accueil', href: '#hero' },
-    { name: 'À propos', href: '#about' },
+    { name: 'Profil', href: '#about' },
     { name: 'Compétences', href: '#skills' },
-    { name: 'Projets', href: '#projects' },
-    { name: 'Expériences', href: '#experience' },
+    { name: 'Projets Drive', href: '#projects' },
+    { name: 'Engagements', href: '#experience' },
   ];
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-lg py-3.5'
-          : 'bg-transparent py-5'
+          ? 'bg-slate-900/95 backdrop-blur-md border-b border-slate-800 shadow-lg py-3'
+          : 'bg-transparent py-4'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand */}
+        {/* Brand with photo */}
         <a href="#hero" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-            AM
+          <div className="relative">
+            <img
+              src="/photo.jpg"
+              alt="Aliou Mbow"
+              className="w-11 h-11 rounded-full object-cover object-top ring-2 ring-blue-500 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform"
+              onError={(e) => {
+                // Fallback to initials if image loading fails
+                (e.target as HTMLElement).style.display = 'none';
+              }}
+            />
+            <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-slate-900 rounded-full" title="Disponible" />
           </div>
           <div>
             <span className="font-semibold text-slate-100 text-lg tracking-tight block">
               {personalInfo.name}
             </span>
-            <span className="text-xs text-blue-400 font-mono tracking-wide block">
-              Full Stack Dev
+            <span className="text-xs text-blue-400 font-medium tracking-wide block">
+              Management & Marketing Digital
             </span>
           </div>
         </a>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-1 bg-slate-800/40 p-1.5 rounded-full border border-slate-700/60 backdrop-blur-sm">
+        <nav className="hidden md:flex items-center gap-1 bg-slate-800/50 p-1.5 rounded-full border border-slate-700/60 backdrop-blur-sm">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -66,13 +75,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
         {/* CTA Buttons */}
         <div className="hidden lg:flex items-center gap-3">
           <a
-            href={personalInfo.github}
+            href={personalInfo.linkedin}
             target="_blank"
             rel="noreferrer"
-            className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
-            title="GitHub"
+            className="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors flex items-center gap-1.5 text-sm font-medium"
+            title="LinkedIn"
           >
-            <Github className="w-5 h-5" />
+            <Linkedin className="w-4 h-4 text-blue-400" />
+            <span>LinkedIn</span>
           </a>
           <button
             onClick={onOpenContact}
@@ -111,6 +121,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
             ))}
           </div>
           <div className="pt-3 border-t border-slate-800 flex flex-col gap-2">
+            <a
+              href={personalInfo.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-200 bg-slate-800 rounded-lg"
+            >
+              <Linkedin className="w-4 h-4 text-blue-400" />
+              <span>Profil LinkedIn</span>
+            </a>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
@@ -127,3 +146,4 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
     </header>
   );
 };
+

@@ -1,6 +1,6 @@
 {
   "name": "Portfolio",
-  "description": "Portfolio professionnel de Pape Aliou Mbow",
+  "description": "Portfolio professionnel d'Aliou Mbow - Management Informatisé des Organisations & Marketing Digital",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

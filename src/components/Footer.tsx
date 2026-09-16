@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUp, Github, Linkedin, Mail, Heart } from 'lucide-react';
+import { ArrowUp, Linkedin, Mail, HardDrive, Phone } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
 export const Footer: React.FC = () => {
@@ -14,47 +14,58 @@ export const Footer: React.FC = () => {
           
           {/* Logo & Name */}
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
-              AM
-            </div>
+            <img
+              src="/photo.jpg"
+              alt="Aliou Mbow"
+              className="w-9 h-9 rounded-full object-cover object-top border border-blue-500/50"
+            />
             <div>
               <span className="text-white font-semibold block text-sm">
                 {personalInfo.name}
               </span>
-              <span className="text-xs text-slate-500 block">
+              <span className="text-xs text-slate-400 block">
                 {personalInfo.role}
               </span>
             </div>
           </div>
 
           {/* Copyright */}
-          <div className="text-xs text-slate-500 text-center flex items-center gap-1">
-            <span>© {new Date().getFullYear()} {personalInfo.name}. Conçu avec rigueur et passion.</span>
+          <div className="text-xs text-slate-500 text-center">
+            <span>© {new Date().getFullYear()} {personalInfo.name}. Management Informatisé des Organisations.</span>
           </div>
 
           {/* Socials & Back to top */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <a
-              href={personalInfo.github}
+              href={personalInfo.googleDriveProjectsUrl}
               target="_blank"
               rel="noreferrer"
-              className="p-2 text-slate-400 hover:text-white transition-colors"
-              title="GitHub"
+              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
+              title="Google Drive Projets"
             >
-              <Github className="w-4 h-4" />
+              <HardDrive className="w-4 h-4" />
             </a>
             <a
               href={personalInfo.linkedin}
               target="_blank"
               rel="noreferrer"
-              className="p-2 text-slate-400 hover:text-white transition-colors"
+              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
               title="LinkedIn"
             >
               <Linkedin className="w-4 h-4" />
             </a>
             <a
+              href="https://wa.me/221783333175"
+              target="_blank"
+              rel="noreferrer"
+              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
+              title="WhatsApp"
+            >
+              <Phone className="w-4 h-4" />
+            </a>
+            <a
               href={`mailto:${personalInfo.email}`}
-              className="p-2 text-slate-400 hover:text-white transition-colors"
+              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
               title="Email"
             >
               <Mail className="w-4 h-4" />
@@ -73,3 +84,4 @@ export const Footer: React.FC = () => {
     </footer>
   );
 };
+

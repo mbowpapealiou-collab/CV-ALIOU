@@ -1,12 +1,11 @@
 export interface Project {
   id: string;
   title: string;
-  category: 'Full Stack' | 'Frontend' | 'Backend';
+  category: 'Management' | 'Marketing Digital' | 'Informatique de Gestion' | 'Projet Universitaire';
   description: string;
   image: string;
   tags: string[];
-  liveUrl?: string;
-  githubUrl?: string;
+  driveUrl?: string;
   featured: boolean;
 }
 
@@ -22,3 +21,4 @@ export interface Experience {
   company: string;
   description: string[];
 }
+

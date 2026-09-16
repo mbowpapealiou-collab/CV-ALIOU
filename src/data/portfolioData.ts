@@ -1,65 +1,78 @@
 import { Project, SkillCategory, Experience } from '../types';
 
 export const personalInfo = {
-  name: "Pape Aliou Mbow",
-  role: "Développeur Full Stack & Ingénieur Logiciel",
+  name: "Aliou Mbow",
+  role: "Management Informatisé des Organisations (MIO)",
+  specialties: "Marketing Digital • Community Management • Informatique de Gestion",
   email: "mbowpapealiou@gmail.com",
-  github: "https://github.com/mbowpapealiou-collab",
-  linkedin: "https://linkedin.com/in/mbowpapealiou",
-  location: "Dakar, Sénégal / Disponible en Remote",
-  availability: "Disponible immédiatement pour opportunités & missions freelance",
-  bio: "Développeur Full Stack passionné par la création d'applications web modernes, réactives et performantes. Avec une solide expertise en React, Next.js, TypeScript, Node.js et Prisma, j'accompagne les équipes et entreprises dans la conception de solutions sur mesure allant de l'architecture logicielle au déploiement cloud.",
+  phone: "+221 78 333 31 75",
+  location: "Dakar & Thiès, Sénégal",
+  linkedin: "https://linkedin.com/in/aliou-mbow-4b5ba7350",
+  // Google Drive folder where Aliou stores all his project deliverables, presentations and reports
+  googleDriveProjectsUrl: "https://drive.google.com/drive/folders/1AliouMbow_Projets?usp=sharing",
+  photoUrl: "/photo.jpg",
+  availability: "À la recherche d'une opportunité en Management / Gestion / Marketing Digital",
+  bio: "Étudiant en 3ème année de Management Informatisé des Organisations (MIO) à l'Université Iba Der Thiam de Thiès, à l'intersection du management, de l'informatique de gestion et de la communication numérique. Force de proposition, rigoureux et autonome, j'ai déjà mis en pratique mes compétences à travers le pilotage d'une activité commerciale et la création de contenu digital.",
+  objective: "Intégrer une structure où je peux apprendre vite, contribuer à des projets concrets dès les premières semaines et prendre progressivement des responsabilités. Objectif à long terme : évoluer vers des fonctions de management et de gestion, avec une ambition de carrière vers la Direction Administrative et Financière.",
+  education: [
+    {
+      degree: "Management Informatisé des Organisations (MIO) — 3ème année",
+      school: "Université Iba Der Thiam de Thiès",
+      year: "En cours"
+    },
+    {
+      degree: "Baccalauréat S2+",
+      school: "Série Scientifique",
+      year: "Obtenu en 2024"
+    }
+  ],
   stats: [
-    { label: "Années d'expérience", value: "3+" },
-    { label: "Projets menés à bien", value: "18+" },
-    { label: "Technologies maîtrisées", value: "12+" },
-    { label: "Satisfaction & Rigueur", value: "100%" }
+    { label: "Formation MIO", value: "3e Année" },
+    { label: "Commissions Dirigées", value: "3" },
+    { label: "Bases & Outils Maîtrisés", value: "10+" },
+    { label: "Rigueur & Engagement", value: "100%" }
   ]
 };
 
 export const skillsData: SkillCategory[] = [
   {
-    title: "Frontend Development",
-    iconName: "Layout",
+    title: "Management & Organisation",
+    iconName: "Briefcase",
     skills: [
-      { name: "React & Next.js", level: 95 },
-      { name: "TypeScript / JavaScript", level: 90 },
-      { name: "Tailwind CSS & CSS3", level: 92 },
-      { name: "Responsive & UI/UX Design", level: 88 },
-      { name: "Gestion d'état (Zustand, Context)", level: 85 }
+      { name: "Organisation du travail & planification", level: 92 },
+      { name: "Coordination & esprit d'équipe", level: 95 },
+      { name: "Pilotage d'activité & suivi d'objectifs", level: 88 },
+      { name: "Gestion de commissions associatives", level: 90 }
     ]
   },
   {
-    title: "Backend & API",
-    iconName: "Server",
+    title: "Marketing Digital & Community",
+    iconName: "Megaphone",
     skills: [
-      { name: "Node.js & Express", level: 90 },
-      { name: "APIs RESTful & GraphQL", level: 88 },
-      { name: "Prisma ORM & Mongoose", level: 87 },
-      { name: "Architecture MVC & Clean Code", level: 85 },
-      { name: "Authentification (JWT, NextAuth)", level: 88 }
+      { name: "Création de contenu digital & idéation", level: 90 },
+      { name: "Stratégie & présence numérique", level: 88 },
+      { name: "Animation de communautés (Community)", level: 85 },
+      { name: "Personal Branding & Réseaux Sociaux", level: 88 }
     ]
   },
   {
-    title: "Bases de Données",
+    title: "Informatique de Gestion & Données",
     iconName: "Database",
     skills: [
-      { name: "PostgreSQL", level: 88 },
-      { name: "MongoDB", level: 85 },
-      { name: "MySQL / MariaDB", level: 82 },
-      { name: "Modélisation relationnelle", level: 90 },
-      { name: "Optimisation de requêtes", level: 80 }
+      { name: "Microsoft Access (Tables, relations, requêtes)", level: 90 },
+      { name: "Microsoft Excel & Traitement de données", level: 88 },
+      { name: "Microsoft Word (Rédaction professionnelle)", level: 92 },
+      { name: "Suivi commercial (Application Intellia)", level: 85 }
     ]
   },
   {
-    title: "DevOps & Outils",
-    iconName: "Terminal",
+    title: "IA, Outils Numériques & Communication",
+    iconName: "Cpu",
     skills: [
-      { name: "Git & GitHub Workflow", level: 92 },
-      { name: "Déploiement Vercel / Cloud Run", level: 88 },
-      { name: "Docker & Conteneurs", level: 78 },
-      { name: "Postman & Tests d'API", level: 85 },
-      { name: "Linux & Bash scripting", level: 82 }
+      { name: "Outils d'IA & Productivité numérique", level: 92 },
+      { name: "Aisance relationnelle & négociation", level: 90 },
+      { name: "Présentations & expression orale", level: 90 },
+      { name: "Gestion autonome & résolution de problèmes", level: 94 }
     ]
   }
 ];
@@ -67,78 +80,86 @@ export const skillsData: SkillCategory[] = [
 export const projectsData: Project[] = [
   {
     id: "proj-1",
-    title: "E-Commerce Nova Market",
-    category: "Full Stack",
-    description: "Plateforme e-commerce complète avec gestion du catalogue, panier dynamique, paiement sécurisé Stripe, et panneau d'administration.",
-    image: "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=800&q=80",
-    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Prisma", "PostgreSQL"],
-    liveUrl: "https://github.com/mbowpapealiou-collab",
-    githubUrl: "https://github.com/mbowpapealiou-collab/CV-ALIOU",
+    title: "Base de Données de Gestion — Microsoft Access",
+    category: "Informatique de Gestion",
+    description: "Conception complète d'une base de données relationnelle de gestion sous Access : structuration rigoureuse des tables, définition des relations d'intégrité et élaboration de requêtes multicritères pour répondre aux besoins opérationnels de l'entreprise.",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+    tags: ["Microsoft Access", "Bases de Données", "Gestion", "Modélisation"],
+    driveUrl: "https://drive.google.com/drive/folders/1AliouMbow_Projets?usp=sharing",
     featured: true
   },
   {
     id: "proj-2",
-    title: "SaaS TaskFlow Pro",
-    category: "Full Stack",
-    description: "Application collaborative de gestion de projets et tickets avec tableaux Kanban, assignation des tâches, notifications et rôles utilisateurs.",
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80",
-    tags: ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
-    liveUrl: "https://github.com/mbowpapealiou-collab",
-    githubUrl: "https://github.com/mbowpapealiou-collab",
+    title: "Pilotage Commercial & Gestion des Ventes — App Intellia",
+    category: "Management",
+    description: "Gestion autonome d'une activité commerciale avec l'application Intellia : suivi rigoureux du chiffre d'affaires, analyse des performances des ventes, gestion des stocks et stratégie active de fidélisation de la clientèle.",
+    image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80",
+    tags: ["Intellia", "Gestion Commerciale", "KPI Ventes", "Relation Client"],
+    driveUrl: "https://drive.google.com/drive/folders/1AliouMbow_Projets?usp=sharing",
     featured: true
   },
   {
     id: "proj-3",
-    title: "Plateforme de Réservation Médicale",
-    category: "Full Stack",
-    description: "Solution de prise de rendez-vous en ligne avec synchronisation de calendrier, rappels automatiques et gestion des créneaux horaires.",
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80",
-    tags: ["Next.js", "PostgreSQL", "Prisma", "Tailwind CSS"],
-    liveUrl: "https://github.com/mbowpapealiou-collab",
-    githubUrl: "https://github.com/mbowpapealiou-collab",
+    title: "Stratégie de Contenu Digital & Personal Branding",
+    category: "Marketing Digital",
+    description: "Construction et déploiement d'une présence numérique autour du marketing digital, du management, de l'entrepreneuriat et du développement de carrière, de la phase d'idéation jusqu'à la publication et l'engagement d'audience.",
+    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=800&q=80",
+    tags: ["Marketing Digital", "Content Creation", "Community Management", "LinkedIn"],
+    driveUrl: "https://drive.google.com/drive/folders/1AliouMbow_Projets?usp=sharing",
     featured: true
   },
   {
     id: "proj-4",
-    title: "API REST Microservices & Auth",
-    category: "Backend",
-    description: "Service backend robuste avec authentification sécurisée JWT, contrôle d'accès basé sur les rôles (RBAC) et documentation OpenAPI Swagger.",
-    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
-    tags: ["Node.js", "Express", "TypeScript", "PostgreSQL", "Docker"],
-    liveUrl: "https://github.com/mbowpapealiou-collab",
-    githubUrl: "https://github.com/mbowpapealiou-collab",
-    featured: false
+    title: "Travaux Appliqués en Management des Organisations",
+    category: "Projet Universitaire",
+    description: "Réalisation de projets d'étude en organisation d'entreprise, optimisation des circuits d'information et audit organisationnel menés dans le cadre du cursus universitaire MIO à l'Université Iba Der Thiam.",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80",
+    tags: ["MIO", "Organisation", "Management", "Audit"],
+    driveUrl: "https://drive.google.com/drive/folders/1AliouMbow_Projets?usp=sharing",
+    featured: true
   }
 ];
 
 export const experiencesData: Experience[] = [
   {
-    period: "2023 - Présent",
-    role: "Développeur Full Stack",
-    company: "Freelance & Projets Clients",
+    period: "2024 - Présent",
+    role: "Adjoint de la Commission Pédagogique",
+    company: "UFR Sciences Économiques et Sociales (SES) — Université Iba Der Thiam de Thiès",
     description: [
-      "Conception et déploiement d'applications web scalables avec Next.js, React et Node.js.",
-      "Modélisation et intégration de bases de données relationnelles avec Prisma et PostgreSQL.",
-      "Optimisation des performances web, du SEO et de l'accessibilité (score Lighthouse > 95)."
+      "Appui direct à l'organisation et au suivi des questions pédagogiques au sein de l'UFR SES.",
+      "Intermédiation et écoute active entre le corps professoral, l'administration et les étudiants.",
+      "Coordination d'événements universitaires et suivi académique des promotions."
     ]
   },
   {
-    period: "2022 - 2023",
-    role: "Développeur Frontend & Web",
-    company: "Solutions Digitales",
+    period: "2023 - 2024",
+    role: "Président de la Commission Sociale",
+    company: "CEERCOOP de Passy, Thiès",
     description: [
-      "Intégration d'interfaces utilisateurs responsives et interactives à partir de maquettes Figma.",
-      "Consommation d'APIs RESTful et gestion d'états applicatifs complexes.",
-      "Collaboration en méthode Agile / Scrum avec revue de code systématique sur GitHub."
+      "Pilotage stratégique des actions sociales et solidaires de la coopérative.",
+      "Coordination de l'ensemble des initiatives d'entraide et représentation officielle de la commission.",
+      "Gestion d'équipe, planification budgétaire et communication avec les partenaires."
     ]
   },
   {
-    period: "2021 - 2022",
-    role: "Formation & Spécialisation Logicielle",
-    company: "Cursus Informatique & Technologies Web",
+    period: "2023 - 2024",
+    role: "Président de la Commission Pédagogique",
+    company: "AERT de Darou Mouhty, Thiès",
     description: [
-      "Approfondissement des algorithmes, structures de données et patrons de conception logicielle (Design Patterns).",
-      "Développement de projets d'envergure en équipe et apprentissage des bonnes pratiques Git."
+      "Coordination globale des activités pédagogiques et de tutorat de l'association des ressortissants.",
+      "Organisation de séances de renforcement scolaire, de conférences et de panels d'orientation.",
+      "Mobilisation des ressources et accompagnement des nouveaux bacheliers et étudiants."
+    ]
+  },
+  {
+    period: "Activité continue",
+    role: "Responsable Activité Commerciale & Création de Contenu",
+    company: "Projet Personnel & Digital",
+    description: [
+      "Gestion autonome des ventes et pilotage des flux financiers via l'application Intellia.",
+      "Création de contenu digital axé sur la transformation numérique, le management et la productivité.",
+      "Fidélisation de la clientèle et prospection active."
     ]
   }
 ];
+
