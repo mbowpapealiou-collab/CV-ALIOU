@@ -34,6 +34,51 @@ export function resetProfilePhoto(): void {
   }
 }
 
+// Auto-compress and resize image to ensure it works on all mobile devices and stays within browser quotas
+function compressImage(file: File, maxDimension = 800, quality = 0.85): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (readerEvent) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxDimension) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          }
+        } else {
+          if (height > maxDimension) {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          // Fallback to raw dataUrl if canvas context is unavailable
+          resolve(readerEvent.target?.result as string);
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+        resolve(compressedDataUrl);
+      };
+      img.onerror = () => reject(new Error("Erreur de chargement de l'image"));
+      img.src = readerEvent.target?.result as string;
+    };
+    reader.onerror = (err) => reject(err);
+    reader.readAsDataURL(file);
+  });
+}
+
 export function useProfilePhoto() {
   const [photoUrl, setPhotoUrl] = useState<string>(() => getProfilePhoto());
   const [isCustom, setIsCustom] = useState<boolean>(() => {
@@ -58,37 +103,37 @@ export function useProfilePhoto() {
     };
   }, []);
 
-  const handleUploadFile = (file: File): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      if (!file.type.startsWith('image/')) {
-        alert('Veuillez sélectionner un fichier image valide (JPG, PNG, WebP).');
-        resolve(false);
-        return;
-      }
+  const handleUploadFile = async (file: File): Promise<boolean> => {
+    if (!file.type.startsWith('image/')) {
+      alert('Veuillez sélectionner un fichier image valide (JPG, PNG, WebP).');
+      return false;
+    }
 
-      // Max 5MB for localStorage limit
-      if (file.size > 5 * 1024 * 1024) {
-        alert("L'image est trop volumineuse. Veuillez choisir une image de moins de 5 Mo.");
-        resolve(false);
-        return;
+    try {
+      // Compress to lightweight high-res JPEG (~100kb) suitable for mobile localStorage
+      const compressedDataUrl = await compressImage(file, 800, 0.86);
+      if (compressedDataUrl) {
+        saveProfilePhoto(compressedDataUrl);
+        return true;
       }
-
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const result = event.target?.result as string;
-        if (result) {
-          saveProfilePhoto(result);
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      };
-      reader.onerror = (error) => {
-        console.error('Erreur lecture image:', error);
-        reject(error);
-      };
-      reader.readAsDataURL(file);
-    });
+      return false;
+    } catch (err) {
+      console.error('Erreur compression image:', err);
+      // Fallback direct read
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const result = event.target?.result as string;
+          if (result) {
+            saveProfilePhoto(result);
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
   };
 
   return {

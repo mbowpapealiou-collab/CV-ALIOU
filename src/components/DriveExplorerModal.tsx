@@ -35,7 +35,18 @@ export const DriveExplorerModal: React.FC<DriveExplorerModalProps> = ({
   const [selectedFile, setSelectedFile] = useState<DriveFile | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [customDriveUrl, setCustomDriveUrl] = useState<string>(() => {
-    return localStorage.getItem('aliou_drive_url') || personalInfo.googleDriveProjectsUrl;
+    try {
+      const saved = localStorage.getItem('aliou_drive_url');
+      if (saved && !saved.includes('1AliouMbow_Projets')) {
+        return saved;
+      }
+      if (saved && saved.includes('1AliouMbow_Projets')) {
+        localStorage.removeItem('aliou_drive_url');
+      }
+    } catch {
+      // Ignore
+    }
+    return personalInfo.googleDriveProjectsUrl;
   });
   const [isEditingUrl, setIsEditingUrl] = useState(false);
   const [tempUrl, setTempUrl] = useState(customDriveUrl);
@@ -269,9 +280,9 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
       <div className="relative w-full max-w-5xl bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl my-6 overflow-hidden flex flex-col max-h-[90vh]">
         
         {/* Top Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 bg-slate-800/90 border-b border-slate-700">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4 bg-slate-800/90 border-b border-slate-700">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-sm shrink-0">
               <HardDrive className="w-5 h-5" />
             </div>
             <div>
@@ -289,20 +300,20 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
             <a
               href={customDriveUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-xl transition-all shadow-md"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-xl transition-all shadow-md min-h-[40px]"
             >
-              <span>Ouvrir dans Google Drive</span>
+              <span>Ouvrir sur Drive</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
 
             <button
               onClick={() => setIsEditingUrl(!isEditingUrl)}
-              className="p-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors"
+              className="p-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center"
               title="Modifier le lien Google Drive"
             >
               <Edit3 className="w-4 h-4" />
@@ -310,7 +321,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors ml-1"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center ml-1"
               aria-label="Fermer"
             >
               <X className="w-5 h-5" />
@@ -347,7 +358,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
         <div className="flex-1 overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-0">
           
           {/* Folders Navigation Sidebar */}
-          <div className="md:col-span-4 bg-slate-900/90 border-r border-slate-800 p-4 overflow-y-auto space-y-1.5">
+          <div className="md:col-span-4 bg-slate-900/90 border-r border-slate-800 p-4 max-h-48 md:max-h-none overflow-y-auto space-y-1.5">
             <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2 flex items-center justify-between">
               <span>Dossiers de Projets</span>
               <span className="text-blue-400 font-mono">{folders.length}</span>

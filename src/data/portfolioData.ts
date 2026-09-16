@@ -9,7 +9,7 @@ export const personalInfo = {
   location: "Dakar & Thiès, Sénégal",
   linkedin: "https://linkedin.com/in/aliou-mbow-4b5ba7350",
   // Google Drive folder where Aliou stores all his project deliverables, presentations and reports
-  googleDriveProjectsUrl: "https://drive.google.com/drive/folders/1AliouMbow_Projets?usp=sharing",
+  googleDriveProjectsUrl: "https://drive.google.com/drive/folders/17Cq4kaG9C9S1aXyA0SLF7PC7p0xg8SO3?usp=drive_link",
   photoUrl: "/photo.jpg",
   availability: "À la recherche d'une opportunité en Management / Gestion / Marketing Digital",
   bio: "Étudiant en 3ème année de Management Informatisé des Organisations (MIO) à l'Université Iba Der Thiam de Thiès, à l'intersection du management, de l'informatique de gestion et de la communication numérique. Force de proposition, rigoureux et autonome, j'ai déjà mis en pratique mes compétences à travers le pilotage d'une activité commerciale et la création de contenu digital.",
@@ -85,7 +85,7 @@ export const projectsData: Project[] = [
     description: "Conception complète d'une base de données relationnelle de gestion sous Access : structuration rigoureuse des tables, définition des relations d'intégrité et élaboration de requêtes multicritères pour répondre aux besoins opérationnels de l'entreprise.",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
     tags: ["Microsoft Access", "Bases de Données", "Gestion", "Modélisation"],
-    driveUrl: "https://drive.google.com/drive/folders/1AliouMbow_Projets?usp=sharing",
+    driveUrl: "https://drive.google.com/drive/folders/17Cq4kaG9C9S1aXyA0SLF7PC7p0xg8SO3?usp=drive_link",
     featured: true
   },
   {
@@ -95,7 +95,7 @@ export const projectsData: Project[] = [
     description: "Gestion autonome d'une activité commerciale avec l'application Intellia : suivi rigoureux du chiffre d'affaires, analyse des performances des ventes, gestion des stocks et stratégie active de fidélisation de la clientèle.",
     image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80",
     tags: ["Intellia", "Gestion Commerciale", "KPI Ventes", "Relation Client"],
-    driveUrl: "https://drive.google.com/drive/folders/1AliouMbow_Projets?usp=sharing",
+    driveUrl: "https://drive.google.com/drive/folders/17Cq4kaG9C9S1aXyA0SLF7PC7p0xg8SO3?usp=drive_link",
     featured: true
   },
   {
@@ -105,7 +105,7 @@ export const projectsData: Project[] = [
     description: "Construction et déploiement d'une présence numérique autour du marketing digital, du management, de l'entrepreneuriat et du développement de carrière, de la phase d'idéation jusqu'à la publication et l'engagement d'audience.",
     image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=800&q=80",
     tags: ["Marketing Digital", "Content Creation", "Community Management", "LinkedIn"],
-    driveUrl: "https://drive.google.com/drive/folders/1AliouMbow_Projets?usp=sharing",
+    driveUrl: "https://drive.google.com/drive/folders/17Cq4kaG9C9S1aXyA0SLF7PC7p0xg8SO3?usp=drive_link",
     featured: true
   },
   {
@@ -115,7 +115,7 @@ export const projectsData: Project[] = [
     description: "Réalisation de projets d'étude en organisation d'entreprise, optimisation des circuits d'information et audit organisationnel menés dans le cadre du cursus universitaire MIO à l'Université Iba Der Thiam.",
     image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80",
     tags: ["MIO", "Organisation", "Management", "Audit"],
-    driveUrl: "https://drive.google.com/drive/folders/1AliouMbow_Projets?usp=sharing",
+    driveUrl: "https://drive.google.com/drive/folders/17Cq4kaG9C9S1aXyA0SLF7PC7p0xg8SO3?usp=drive_link",
     featured: true
   }
 ];

@@ -40,16 +40,25 @@ export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose, onOpenWhatsAp
         />
 
         {/* Top bar with actions */}
-        <div className="flex items-center justify-between px-6 py-4 bg-slate-800 border-b border-slate-700">
-          <div className="flex items-center gap-2 text-white font-semibold text-sm">
-            <Award className="w-4 h-4 text-blue-400" />
-            <span>Curriculum Vitae — {personalInfo.name}</span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4 bg-slate-800 border-b border-slate-700">
+          <div className="flex items-center justify-between sm:justify-start gap-2 text-white font-semibold text-xs sm:text-sm">
+            <div className="flex items-center gap-2">
+              <Award className="w-4 h-4 text-blue-400 shrink-0" />
+              <span>Curriculum Vitae — {personalInfo.name}</span>
+            </div>
+            <button
+              onClick={onClose}
+              className="sm:hidden p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-700 transition-colors"
+              aria-label="Fermer"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-xl transition-all shadow-sm"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-xl transition-all shadow-sm min-h-[40px]"
               title="Télécharger ou imprimer le CV en PDF"
             >
               <Printer className="w-3.5 h-3.5" />
@@ -57,7 +66,7 @@ export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose, onOpenWhatsAp
             </button>
             <button
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-700 transition-colors"
+              className="hidden sm:inline-flex p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-700 transition-colors min-h-[40px] min-w-[40px] items-center justify-center"
               aria-label="Fermer"
             >
               <X className="w-5 h-5" />
