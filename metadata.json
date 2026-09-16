@@ -1,0 +1,6 @@
+{
+  "name": "Portfolio",
+  "description": "Portfolio professionnel de Pape Aliou Mbow",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
