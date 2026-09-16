@@ -51,7 +51,7 @@ export const CVModal: React.FC<CVModalProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4 bg-slate-800 border-b border-slate-700">
           <div className="flex items-center justify-between sm:justify-start gap-2 text-white font-semibold text-xs sm:text-sm">
             <div className="flex items-center gap-2">
-              <Award className="w-4 h-4 text-blue-400 shrink-0" />
+              <Award className="w-4 h-4 text-orange-400 shrink-0" />
               <span>Curriculum Vitae — {personalInfo.name}</span>
             </div>
             <button
@@ -66,7 +66,7 @@ export const CVModal: React.FC<CVModalProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-xl transition-all shadow-sm min-h-[40px]"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 rounded-xl transition-all shadow-sm min-h-[40px] cursor-pointer"
               title="Télécharger ou imprimer le CV en PDF"
             >
               <Printer className="w-3.5 h-3.5" />
@@ -74,7 +74,7 @@ export const CVModal: React.FC<CVModalProps> = ({
             </button>
             <button
               onClick={onClose}
-              className="hidden sm:inline-flex p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-700 transition-colors min-h-[40px] min-w-[40px] items-center justify-center"
+              className="hidden sm:inline-flex p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-700 transition-colors min-h-[40px] min-w-[40px] items-center justify-center cursor-pointer"
               aria-label="Fermer"
             >
               <X className="w-5 h-5" />
@@ -91,25 +91,25 @@ export const CVModal: React.FC<CVModalProps> = ({
               <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
                 {personalInfo.name}
               </h2>
-              <p className="text-blue-400 font-semibold text-base sm:text-lg mt-1">
+              <p className="text-orange-400 font-semibold text-base sm:text-lg mt-1">
                 Management Informatisé des Organisations (MIO) | Marketing digital | Community Management
               </p>
               <div className="mt-3.5 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-300">
                 <span className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-blue-400" />
+                  <MapPin className="w-3.5 h-3.5 text-orange-400" />
                   Dakar, Sénégal
                 </span>
                 <button
                   type="button"
                   onClick={onOpenWhatsApp || (() => window.open('https://wa.me/221783333175', '_blank'))}
-                  className="flex items-center gap-1.5 text-emerald-400 hover:underline font-medium"
+                  className="flex items-center gap-1.5 text-emerald-400 hover:underline font-medium cursor-pointer"
                 >
                   <Phone className="w-3.5 h-3.5" />
                   +221 78 333 31 75 (WhatsApp)
                 </button>
                 <a
                   href={`mailto:${personalInfo.email}`}
-                  className="flex items-center gap-1.5 text-blue-400 hover:underline"
+                  className="flex items-center gap-1.5 text-orange-400 hover:text-amber-300 hover:underline"
                 >
                   <Mail className="w-3.5 h-3.5" />
                   {personalInfo.email}
@@ -118,7 +118,7 @@ export const CVModal: React.FC<CVModalProps> = ({
                   href={personalInfo.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-blue-400 hover:underline"
+                  className="flex items-center gap-1.5 text-orange-400 hover:text-amber-300 hover:underline"
                 >
                   <Linkedin className="w-3.5 h-3.5" />
                   linkedin.com/in/aliou-mbow-4b5ba7350
@@ -131,13 +131,13 @@ export const CVModal: React.FC<CVModalProps> = ({
               <img
                 src={photoUrl}
                 alt="Aliou Mbow"
-                className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover object-top border-2 border-blue-500 shadow-xl"
+                className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover object-top border-2 border-orange-500 shadow-xl"
               />
               {isAdmin && (
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="absolute bottom-1 right-1 p-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white shadow-md border border-white/20 transition-all opacity-80 group-hover:opacity-100 cursor-pointer"
+                  className="absolute bottom-1 right-1 p-1.5 rounded-lg bg-orange-500 hover:bg-amber-400 text-slate-950 shadow-md border border-white/20 transition-all opacity-80 group-hover:opacity-100 cursor-pointer"
                   title="Changer la photo du CV (Admin)"
                 >
                   <Camera className="w-3.5 h-3.5" />
@@ -148,7 +148,7 @@ export const CVModal: React.FC<CVModalProps> = ({
 
           {/* Profil */}
           <div>
-            <h3 className="text-xs font-bold text-blue-400 tracking-wider uppercase mb-2">
+            <h3 className="text-xs font-bold text-orange-400 tracking-wider uppercase mb-2">
               Profil
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed text-justify">
@@ -158,7 +158,7 @@ export const CVModal: React.FC<CVModalProps> = ({
 
           {/* Formation */}
           <div>
-            <h3 className="text-xs font-bold text-blue-400 tracking-wider uppercase mb-3">
+            <h3 className="text-xs font-bold text-orange-400 tracking-wider uppercase mb-3">
               Formation
             </h3>
             <div className="space-y-3">
@@ -167,7 +167,7 @@ export const CVModal: React.FC<CVModalProps> = ({
                   <h4 className="text-sm font-bold text-white">Université Iba Der Thiam de Thiès</h4>
                   <p className="text-xs text-slate-300 mt-0.5">Management Informatisé des Organisations (MIO) — 3ème année</p>
                 </div>
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20">
                   En cours
                 </span>
               </div>
@@ -185,14 +185,14 @@ export const CVModal: React.FC<CVModalProps> = ({
 
           {/* Responsabilités & Engagements */}
           <div>
-            <h3 className="text-xs font-bold text-blue-400 tracking-wider uppercase mb-3">
+            <h3 className="text-xs font-bold text-orange-400 tracking-wider uppercase mb-3">
               Responsabilités & Engagements
             </h3>
             <div className="space-y-4">
               <div className="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 space-y-1">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                   <h4 className="text-sm font-bold text-white">Adjoint de la Commission Pédagogique</h4>
-                  <span className="text-xs text-blue-400 font-mono">UFR SES, Université Iba Der Thiam</span>
+                  <span className="text-xs text-amber-400 font-mono">UFR SES, Université Iba Der Thiam</span>
                 </div>
                 <p className="text-xs text-slate-300">
                   Appui à l'organisation et au suivi des questions pédagogiques au sein de l'UFR Sciences Économiques et Sociales.
@@ -202,7 +202,7 @@ export const CVModal: React.FC<CVModalProps> = ({
               <div className="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 space-y-1">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                   <h4 className="text-sm font-bold text-white">Président de la Commission Sociale</h4>
-                  <span className="text-xs text-blue-400 font-mono">CEERCOOP de Passy, Thiès</span>
+                  <span className="text-xs text-amber-400 font-mono">CEERCOOP de Passy, Thiès</span>
                 </div>
                 <p className="text-xs text-slate-300">
                   Pilotage des actions sociales de la coopérative : coordination des initiatives et représentation de la commission.
@@ -212,7 +212,7 @@ export const CVModal: React.FC<CVModalProps> = ({
               <div className="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 space-y-1">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                   <h4 className="text-sm font-bold text-white">Président de la Commission Pédagogique</h4>
-                  <span className="text-xs text-blue-400 font-mono">AERT de Darou Mouhty, Thiès</span>
+                  <span className="text-xs text-amber-400 font-mono">AERT de Darou Mouhty, Thiès</span>
                 </div>
                 <p className="text-xs text-slate-300">
                   Coordination des activités pédagogiques de l'association des ressortissants.
@@ -223,13 +223,13 @@ export const CVModal: React.FC<CVModalProps> = ({
 
           {/* Engagements & Activités */}
           <div>
-            <h3 className="text-xs font-bold text-blue-400 tracking-wider uppercase mb-3">
+            <h3 className="text-xs font-bold text-orange-400 tracking-wider uppercase mb-3">
               Engagements & Activités
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60">
                 <h4 className="text-xs font-bold text-white">Pilotage d'une activité commerciale</h4>
-                <p className="text-[11px] text-blue-400 font-medium mt-0.5">Suivi via l'application Intellia</p>
+                <p className="text-[11px] text-amber-400 font-medium mt-0.5">Suivi via l'application Intellia</p>
                 <p className="text-xs text-slate-300 mt-1">
                   Gestion autonome d'une activité de vente : suivi des performances, fidélisation client et recherche continue de croissance du chiffre d'affaires.
                 </p>
@@ -237,7 +237,7 @@ export const CVModal: React.FC<CVModalProps> = ({
 
               <div className="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60">
                 <h4 className="text-xs font-bold text-white">Création de contenu digital</h4>
-                <p className="text-[11px] text-blue-400 font-medium mt-0.5">Personal Branding & Réseaux Sociaux</p>
+                <p className="text-[11px] text-amber-400 font-medium mt-0.5">Personal Branding & Réseaux Sociaux</p>
                 <p className="text-xs text-slate-300 mt-1">
                   Construction d'une présence numérique personnelle autour du marketing digital, de la carrière, du management et de l'entrepreneuriat — de l'idéation à la publication.
                 </p>
@@ -247,7 +247,7 @@ export const CVModal: React.FC<CVModalProps> = ({
 
           {/* Projets & Réalisations */}
           <div>
-            <h3 className="text-xs font-bold text-blue-400 tracking-wider uppercase mb-3">
+            <h3 className="text-xs font-bold text-orange-400 tracking-wider uppercase mb-3">
               Projets & Réalisations
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -267,8 +267,8 @@ export const CVModal: React.FC<CVModalProps> = ({
           </div>
 
           {/* Objectif Professionnel */}
-          <div className="p-4 rounded-xl bg-gradient-to-r from-blue-900/30 to-slate-800/60 border border-blue-800/40">
-            <h3 className="text-xs font-bold text-blue-400 tracking-wider uppercase mb-1">
+          <div className="p-4 rounded-xl bg-gradient-to-r from-orange-950/40 to-slate-800/60 border border-orange-500/30">
+            <h3 className="text-xs font-bold text-orange-400 tracking-wider uppercase mb-1">
               Objectif Professionnel
             </h3>
             <p className="text-xs text-slate-200 leading-relaxed">
@@ -278,7 +278,7 @@ export const CVModal: React.FC<CVModalProps> = ({
 
           {/* Compétences Clés */}
           <div>
-            <h3 className="text-xs font-bold text-blue-400 tracking-wider uppercase mb-3">
+            <h3 className="text-xs font-bold text-orange-400 tracking-wider uppercase mb-3">
               Compétences Clés
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">

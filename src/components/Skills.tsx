@@ -6,14 +6,14 @@ export const Skills: React.FC = () => {
   const getIcon = (name: string) => {
     switch (name) {
       case 'Briefcase':
-        return <Briefcase className="w-5 h-5 text-blue-400" />;
+        return <Briefcase className="w-5 h-5 text-orange-400" />;
       case 'Megaphone':
-        return <Megaphone className="w-5 h-5 text-sky-400" />;
+        return <Megaphone className="w-5 h-5 text-amber-400" />;
       case 'Database':
         return <Database className="w-5 h-5 text-emerald-400" />;
       case 'Cpu':
       default:
-        return <Cpu className="w-5 h-5 text-indigo-400" />;
+        return <Cpu className="w-5 h-5 text-orange-400" />;
     }
   };
 
@@ -23,7 +23,7 @@ export const Skills: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/25 text-orange-400 text-xs font-semibold mb-3">
             <Sparkles className="w-3.5 h-3.5" />
             COMPÉTENCES CLÉS
           </div>
@@ -40,7 +40,7 @@ export const Skills: React.FC = () => {
           {skillsData.map((cat) => (
             <div
               key={cat.title}
-              className="p-6 sm:p-8 rounded-3xl bg-slate-900/60 border border-slate-800 backdrop-blur-sm shadow-xl hover:border-slate-700 transition-colors"
+              className="p-6 sm:p-8 rounded-3xl bg-slate-900/60 border border-slate-800 backdrop-blur-sm shadow-xl hover:border-orange-500/30 transition-colors"
             >
               <div className="flex items-center gap-3 mb-6">
                 <div className="p-2.5 rounded-xl bg-slate-800 border border-slate-700">
@@ -56,11 +56,11 @@ export const Skills: React.FC = () => {
                   <div key={skill.name}>
                     <div className="flex justify-between items-center text-sm font-medium mb-1.5">
                       <span className="text-slate-200">{skill.name}</span>
-                      <span className="text-xs text-blue-400 font-mono font-semibold">{skill.level}%</span>
+                      <span className="text-xs text-orange-400 font-mono font-semibold">{skill.level}%</span>
                     </div>
                     <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-blue-500 to-sky-400 transition-all duration-1000"
+                        className="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all duration-1000"
                         style={{ width: `${skill.level}%` }}
                       />
                     </div>
@@ -73,7 +73,7 @@ export const Skills: React.FC = () => {
 
         {/* Floating tech badge cloud */}
         <div className="mt-14 p-6 sm:p-8 rounded-2xl bg-slate-800/30 border border-slate-800 text-center">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
+          <p className="text-xs font-semibold text-orange-400/90 uppercase tracking-wider mb-4">
             Domaines de Maîtrise & Outils Pratiques
           </p>
           <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
@@ -93,7 +93,7 @@ export const Skills: React.FC = () => {
             ].map((tech) => (
               <span
                 key={tech}
-                className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs sm:text-sm font-medium border border-slate-700/70 transition-colors"
+                className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700/80 text-slate-300 hover:text-orange-300 text-xs sm:text-sm font-medium border border-slate-700/70 hover:border-orange-500/30 transition-colors"
               >
                 {tech}
               </span>

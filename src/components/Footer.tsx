@@ -1,19 +1,14 @@
 import React from 'react';
-import { ArrowUp, Linkedin, Mail, HardDrive, Phone, Lock, Shield } from 'lucide-react';
+import { ArrowUp, Linkedin, Mail, HardDrive, Phone } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { useProfilePhoto } from '../utils/photoStorage';
 
-interface FooterProps {
-  isAdmin?: boolean;
-  onOpenAdmin?: () => void;
-}
-
-export const Footer: React.FC<FooterProps> = ({ isAdmin = false, onOpenAdmin }) => {
+export const Footer: React.FC = () => {
   const { photoUrl } = useProfilePhoto();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (window.location.hash) {
+    if (window.location.hash && window.location.hash !== '#admin') {
       window.history.replaceState(null, '', window.location.pathname);
     }
   };
@@ -28,14 +23,14 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin = false, onOpenAdmin }) 
             <img
               src={photoUrl}
               alt="Aliou Mbow"
-              className="w-10 h-10 rounded-full object-cover object-top border-2 border-blue-500/50 shadow-sm"
+              className="w-10 h-10 rounded-full object-cover object-top border-2 border-orange-500/60 shadow-sm"
               referrerPolicy="no-referrer"
             />
             <div>
               <span className="text-white font-semibold block text-sm">
                 {personalInfo.name}
               </span>
-              <span className="text-xs text-slate-400 block">
+              <span className="text-xs text-amber-400/90 block">
                 {personalInfo.role}
               </span>
             </div>
@@ -52,7 +47,7 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin = false, onOpenAdmin }) 
               href={personalInfo.googleDriveProjectsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
+              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-orange-400 border border-slate-800 transition-colors"
               title="Google Drive Projets"
             >
               <HardDrive className="w-4 h-4" />
@@ -61,7 +56,7 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin = false, onOpenAdmin }) 
               href={personalInfo.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
+              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-orange-400 border border-slate-800 transition-colors"
               title="LinkedIn"
             >
               <Linkedin className="w-4 h-4" />
@@ -70,34 +65,21 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin = false, onOpenAdmin }) 
               href="https://wa.me/221783333175"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
+              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-emerald-400 border border-slate-800 transition-colors"
               title="WhatsApp"
             >
               <Phone className="w-4 h-4" />
             </a>
             <a
               href={`mailto:${personalInfo.email}`}
-              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors"
+              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-orange-400 border border-slate-800 transition-colors"
               title="Email"
             >
               <Mail className="w-4 h-4" />
             </a>
-            {onOpenAdmin && (
-              <button
-                onClick={onOpenAdmin}
-                className={`p-2 rounded-lg border transition-colors cursor-pointer ${
-                  isAdmin 
-                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20' 
-                    : 'bg-slate-900 hover:bg-slate-800 text-slate-500 hover:text-blue-400 border-slate-800'
-                }`}
-                title={isAdmin ? "Studio Administrateur (Actif)" : "Espace Administrateur (Aliou Mbow)"}
-              >
-                {isAdmin ? <Shield className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
-              </button>
-            )}
             <button
               onClick={scrollToTop}
-              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors ml-2"
+              className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-orange-400 border border-slate-800 transition-colors ml-2 cursor-pointer"
               title="Retour en haut"
             >
               <ArrowUp className="w-4 h-4" />

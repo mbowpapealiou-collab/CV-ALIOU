@@ -32,7 +32,7 @@ export const About: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/25 text-orange-400 text-xs font-semibold mb-3">
             <User className="w-3.5 h-3.5" />
             PROFIL & PARCOURS
           </div>
@@ -51,9 +51,9 @@ export const About: React.FC = () => {
             return (
               <div
                 key={item.title}
-                className="p-6 rounded-2xl bg-slate-800/40 border border-slate-700/60 hover:border-blue-500/40 transition-all hover:-translate-y-1 shadow-sm"
+                className="p-6 rounded-2xl bg-slate-800/40 border border-slate-700/60 hover:border-orange-500/40 transition-all hover:-translate-y-1 shadow-sm"
               >
-                <div className="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400 mb-4">
                   <Icon className="w-6 h-6" />
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
@@ -67,7 +67,7 @@ export const About: React.FC = () => {
         <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-6 sm:p-8 rounded-2xl bg-slate-800/30 border border-slate-700/50">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
+              <div className="p-2.5 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-400">
                 <GraduationCap className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-white">Formation Académique</h3>
@@ -77,7 +77,7 @@ export const About: React.FC = () => {
                 <div key={idx} className="pb-3 border-b border-slate-700/40 last:border-0 last:pb-0">
                   <div className="flex items-center justify-between">
                     <h4 className="font-semibold text-white text-base">{edu.degree}</h4>
-                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 font-medium border border-blue-500/20">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-orange-500/10 text-orange-400 font-medium border border-orange-500/20">
                       {edu.year}
                     </span>
                   </div>
@@ -87,9 +87,9 @@ export const About: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-blue-950/40 to-slate-800/40 border border-blue-800/40">
+          <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-orange-950/30 via-slate-900/60 to-slate-800/40 border border-orange-500/30">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+              <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
                 <TrendingUp className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-white">Objectif Professionnel</h3>
@@ -121,11 +121,11 @@ export const About: React.FC = () => {
                 className="relative flex flex-col sm:flex-row items-start gap-6 group"
               >
                 {/* Center dot */}
-                <div className="absolute left-3.5 sm:left-1/2 -translate-x-1/2 top-1.5 w-4 h-4 rounded-full bg-blue-600 ring-4 ring-slate-900 ring-offset-2 ring-offset-blue-500/20 group-hover:scale-125 transition-transform" />
+                <div className="absolute left-3.5 sm:left-1/2 -translate-x-1/2 top-1.5 w-4 h-4 rounded-full bg-orange-500 ring-4 ring-slate-900 ring-offset-2 ring-offset-orange-500/20 group-hover:scale-125 transition-transform" />
 
                 {/* Left side on desktop: Date/Period */}
                 <div className="sm:w-1/2 sm:text-right pl-10 sm:pl-0 sm:pr-10">
-                  <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                  <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/25">
                     {exp.period}
                   </span>
                   <h4 className="text-lg font-bold text-white mt-1">{exp.role}</h4>

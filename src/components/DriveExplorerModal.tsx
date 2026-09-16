@@ -291,7 +291,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
         {/* Top Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4 bg-slate-800/90 border-b border-slate-700">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-sm shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400 shadow-sm shrink-0">
               <HardDrive className="w-5 h-5" />
             </div>
             <div>
@@ -299,7 +299,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
                 <h3 className="text-base sm:text-lg font-bold text-white">
                   Google Drive — Espace Projets
                 </h3>
-                <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[11px] font-medium hidden sm:inline-block">
+                <span className="px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20 text-[11px] font-medium hidden sm:inline-block">
                   Compte : {personalInfo.email}
                 </span>
               </div>
@@ -314,7 +314,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
               href={customDriveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-xl transition-all shadow-md min-h-[40px]"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-bold text-slate-950 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 rounded-xl transition-all shadow-md min-h-[40px]"
             >
               <span>Ouvrir sur Drive</span>
               <ExternalLink className="w-3.5 h-3.5" />
@@ -322,7 +322,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
 
             <button
               onClick={() => setIsEditingUrl(!isEditingUrl)}
-              className="p-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center"
+              className="p-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center cursor-pointer"
               title="Modifier le lien Google Drive"
             >
               <Edit3 className="w-4 h-4" />
@@ -330,7 +330,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center ml-1"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center ml-1 cursor-pointer"
               aria-label="Fermer"
             >
               <X className="w-5 h-5" />
@@ -340,9 +340,9 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
 
         {/* Optional Custom Drive URL Editor */}
         {isEditingUrl && (
-          <div className="px-6 py-3 bg-blue-950/40 border-b border-blue-800/40">
+          <div className="px-6 py-3 bg-orange-950/30 border-b border-orange-800/40">
             <form onSubmit={handleSaveUrl} className="flex flex-col sm:flex-row gap-2 items-center">
-              <span className="text-xs text-blue-300 font-medium whitespace-nowrap">
+              <span className="text-xs text-orange-300 font-medium whitespace-nowrap">
                 Lien de votre dossier Drive :
               </span>
               <input
@@ -350,11 +350,11 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
                 value={tempUrl}
                 onChange={(e) => setTempUrl(e.target.value)}
                 placeholder="https://drive.google.com/drive/folders/..."
-                className="flex-1 w-full px-3 py-1.5 rounded-lg bg-slate-900 border border-blue-500/40 text-xs text-white focus:outline-none"
+                className="flex-1 w-full px-3 py-1.5 rounded-lg bg-slate-900 border border-orange-500/40 text-xs text-white focus:outline-none"
               />
               <button
                 type="submit"
-                className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1 shrink-0"
+                className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 text-xs font-bold flex items-center gap-1 shrink-0 cursor-pointer"
               >
                 <Check className="w-3.5 h-3.5" />
                 <span>Enregistrer</span>
@@ -370,7 +370,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
           <div className="md:col-span-4 bg-slate-900/90 border-r border-slate-800 p-4 max-h-48 md:max-h-none overflow-y-auto space-y-1.5">
             <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2 flex items-center justify-between">
               <span>Dossiers de Projets</span>
-              <span className="text-blue-400 font-mono">{folders.length}</span>
+              <span className="text-orange-400 font-mono">{folders.length}</span>
             </div>
 
             {folders.map((folder) => {
@@ -382,30 +382,30 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
                     setSelectedFolderId(folder.id);
                     setSelectedFile(null);
                   }}
-                  className={`w-full flex items-center justify-between p-3 rounded-2xl text-left transition-all ${
+                  className={`w-full flex items-center justify-between p-3 rounded-2xl text-left transition-all cursor-pointer ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                      ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 font-bold shadow-md shadow-orange-500/25'
                       : 'hover:bg-slate-800/60 text-slate-300'
                   }`}
                 >
                   <div className="flex items-center gap-3 overflow-hidden">
-                    <Folder className={`w-5 h-5 shrink-0 ${isActive ? 'text-white' : 'text-blue-400'}`} />
+                    <Folder className={`w-5 h-5 shrink-0 ${isActive ? 'text-slate-950' : 'text-orange-400'}`} />
                     <div className="truncate">
                       <div className="text-xs font-semibold truncate leading-tight">
                         {folder.name}
                       </div>
-                      <div className={`text-[10px] mt-0.5 ${isActive ? 'text-blue-100' : 'text-slate-400'}`}>
+                      <div className={`text-[10px] mt-0.5 ${isActive ? 'text-slate-900/80 font-medium' : 'text-slate-400'}`}>
                         {folder.filesCount} document{folder.filesCount > 1 ? 's' : ''}
                       </div>
                     </div>
                   </div>
-                  <ChevronRight className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                  <ChevronRight className={`w-4 h-4 shrink-0 ${isActive ? 'text-slate-950' : 'text-slate-500'}`} />
                 </button>
               );
             })}
 
             <div className="mt-6 p-3.5 rounded-2xl bg-slate-800/40 border border-slate-700/50 text-xs text-slate-300">
-              <div className="flex items-center gap-2 text-blue-400 font-semibold mb-1">
+              <div className="flex items-center gap-2 text-orange-400 font-semibold mb-1">
                 <ShieldCheck className="w-4 h-4" />
                 <span>Propriétaire des fichiers</span>
               </div>
@@ -425,11 +425,11 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-4 border-b border-slate-800">
               <div>
                 <h4 className="text-base font-bold text-white flex items-center gap-2">
-                  <Folder className="w-4 h-4 text-blue-400" />
+                  <Folder className="w-4 h-4 text-orange-400" />
                   <span>{activeFolder.name}</span>
                 </h4>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Catégorie : <span className="text-blue-300">{activeFolder.category}</span>
+                  Catégorie : <span className="text-amber-400 font-medium">{activeFolder.category}</span>
                 </p>
               </div>
 
@@ -442,7 +442,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Rechercher un fichier..."
-                  className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                  className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-orange-500"
                 />
               </div>
             </div>
@@ -457,21 +457,21 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
                 filteredFiles.map((file) => (
                   <div
                     key={file.id}
-                    className="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-blue-500/50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+                    className="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-orange-500/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
                   >
                     <div className="flex items-start gap-3.5 flex-1">
                       <div className="p-2.5 rounded-xl bg-slate-800 border border-slate-700 group-hover:scale-105 transition-transform shrink-0">
                         {getFileIcon(file.type)}
                       </div>
                       <div>
-                        <h5 className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">
+                        <h5 className="text-sm font-bold text-white group-hover:text-orange-400 transition-colors">
                           {file.name}
                         </h5>
                         <p className="text-xs text-slate-400 mt-1 line-clamp-2">
                           {file.description}
                         </p>
                         <div className="mt-2 flex flex-wrap items-center gap-3 text-[11px] text-slate-400">
-                          <span className="font-mono text-blue-400">{file.size}</span>
+                          <span className="font-mono text-orange-400">{file.size}</span>
                           <span>•</span>
                           <span>Mis à jour : {file.date}</span>
                           <span>•</span>
@@ -483,15 +483,15 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
                     <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                       <button
                         onClick={() => setSelectedFile(file)}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 hover:border-orange-500/30 transition-colors cursor-pointer"
                       >
-                        <Eye className="w-3.5 h-3.5 text-blue-400" />
+                        <Eye className="w-3.5 h-3.5 text-orange-400" />
                         <span>Aperçu</span>
                       </button>
 
                       <button
                         onClick={() => handleDownloadSummary(file)}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 text-xs font-semibold transition-colors"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-orange-500/15 hover:bg-orange-500/25 text-orange-300 border border-orange-500/30 text-xs font-semibold transition-colors cursor-pointer"
                         title="Télécharger la fiche de synthèse du projet"
                       >
                         <Download className="w-3.5 h-3.5" />
@@ -512,7 +512,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
                 href={customDriveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-400 hover:text-blue-300 font-semibold inline-flex items-center gap-1"
+                className="text-orange-400 hover:text-amber-300 font-semibold inline-flex items-center gap-1"
               >
                 <span>Accéder au dossier en ligne complet</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -529,13 +529,13 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
             <div className="max-w-xl w-full bg-slate-900 border border-slate-700 p-6 sm:p-8 rounded-3xl shadow-2xl relative space-y-4">
               <button
                 onClick={() => setSelectedFile(null)}
-                className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300"
+                className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
 
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded-2xl bg-blue-600/20 text-blue-400 border border-blue-500/30">
+                <div className="p-3 rounded-2xl bg-orange-500/15 text-orange-400 border border-orange-500/30">
                   {getFileIcon(selectedFile.type)}
                 </div>
                 <div>
@@ -549,14 +549,14 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
               </div>
 
               <div>
-                <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">Description</span>
+                <span className="text-xs font-bold text-orange-400 uppercase tracking-wider">Description</span>
                 <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
                   {selectedFile.description}
                 </p>
               </div>
 
               <div>
-                <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">Contenu clé du fichier</span>
+                <span className="text-xs font-bold text-orange-400 uppercase tracking-wider">Contenu clé du fichier</span>
                 <ul className="mt-2 space-y-1.5 text-xs text-slate-300">
                   {selectedFile.highlights.map((h, i) => (
                     <li key={i} className="flex items-start gap-2">
@@ -570,7 +570,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
               <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-3">
                 <button
                   onClick={() => handleDownloadSummary(selectedFile)}
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold border border-slate-700 flex items-center justify-center gap-2 transition-colors"
+                  className="flex-1 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold border border-slate-700 flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   <Download className="w-4 h-4" />
                   <span>Télécharger la fiche</span>
@@ -579,7 +579,7 @@ Contact : ${personalInfo.email} / ${personalInfo.phone}
                   href={customDriveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-md"
+                  className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-slate-950 text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md cursor-pointer"
                 >
                   <span>Ouvrir sur Drive</span>
                   <ExternalLink className="w-4 h-4" />
