@@ -14,12 +14,41 @@ import { Footer } from './components/Footer';
 import { CVModal } from './components/CVModal';
 import { WhatsAppModal } from './components/WhatsAppModal';
 import { DriveExplorerModal } from './components/DriveExplorerModal';
+import { AdminModal } from './components/AdminModal';
 
 export default function App() {
   const [isCVModalOpen, setIsCVModalOpen] = useState(false);
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
   const [isDriveModalOpen, setIsDriveModalOpen] = useState(false);
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [driveFolderId, setDriveFolderId] = useState<string | undefined>(undefined);
+
+  // Admin authentication state
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('aliou_is_admin') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const handleAdminLogin = () => {
+    setIsAdmin(true);
+    try {
+      localStorage.setItem('aliou_is_admin', 'true');
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleAdminLogout = () => {
+    setIsAdmin(false);
+    try {
+      localStorage.removeItem('aliou_is_admin');
+    } catch {
+      // ignore
+    }
+  };
 
   const scrollToContact = () => {
     const contactSection = document.getElementById('contact');
@@ -35,34 +64,46 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-blue-600 selection:text-white">
-      {/* Navigation Header */}
+      {/* Navigation Header with hashless smooth scroll & admin indicator */}
       <Navbar
         onOpenContact={scrollToContact}
         onOpenWhatsApp={() => setIsWhatsAppModalOpen(true)}
+        isAdmin={isAdmin}
+        onOpenAdmin={() => setIsAdminModalOpen(true)}
       />
 
-      {/* Main Content Sections */}
+      {/* Main Content Sections — Fully visible to all visitors as originally intended */}
       <main>
         <Hero
           onOpenContact={scrollToContact}
           onDownloadCV={() => setIsCVModalOpen(true)}
           onOpenDrive={() => handleOpenDriveModal()}
           onOpenWhatsApp={() => setIsWhatsAppModalOpen(true)}
+          isAdmin={isAdmin}
+          onOpenAdmin={() => setIsAdminModalOpen(true)}
         />
         <About />
         <Skills />
-        <Projects onOpenDriveModal={handleOpenDriveModal} />
+        <Projects
+          onOpenDriveModal={handleOpenDriveModal}
+          isAdmin={isAdmin}
+          onOpenAdmin={() => setIsAdminModalOpen(true)}
+        />
         <ContactForm onOpenWhatsApp={() => setIsWhatsAppModalOpen(true)} />
       </main>
 
-      {/* Footer */}
-      <Footer />
+      {/* Footer with discreet admin access */}
+      <Footer
+        isAdmin={isAdmin}
+        onOpenAdmin={() => setIsAdminModalOpen(true)}
+      />
 
       {/* CV Modal Preview & Print */}
       <CVModal
         isOpen={isCVModalOpen}
         onClose={() => setIsCVModalOpen(false)}
         onOpenWhatsApp={() => setIsWhatsAppModalOpen(true)}
+        isAdmin={isAdmin}
       />
 
       {/* WhatsApp and Phone Modal */}
@@ -76,6 +117,15 @@ export default function App() {
         isOpen={isDriveModalOpen}
         onClose={() => setIsDriveModalOpen(false)}
         initialFolderId={driveFolderId}
+      />
+
+      {/* Exclusive Administrator Modal for Aliou Mbow */}
+      <AdminModal
+        isOpen={isAdminModalOpen}
+        onClose={() => setIsAdminModalOpen(false)}
+        isAdmin={isAdmin}
+        onLogin={handleAdminLogin}
+        onLogout={handleAdminLogout}
       />
     </div>
   );

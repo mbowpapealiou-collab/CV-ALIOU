@@ -1,13 +1,21 @@
 import React from 'react';
-import { ArrowUp, Linkedin, Mail, HardDrive, Phone } from 'lucide-react';
+import { ArrowUp, Linkedin, Mail, HardDrive, Phone, Lock, Shield } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { useProfilePhoto } from '../utils/photoStorage';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  isAdmin?: boolean;
+  onOpenAdmin?: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ isAdmin = false, onOpenAdmin }) => {
   const { photoUrl } = useProfilePhoto();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
   };
 
   return (
@@ -74,6 +82,19 @@ export const Footer: React.FC = () => {
             >
               <Mail className="w-4 h-4" />
             </a>
+            {onOpenAdmin && (
+              <button
+                onClick={onOpenAdmin}
+                className={`p-2 rounded-lg border transition-colors cursor-pointer ${
+                  isAdmin 
+                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20' 
+                    : 'bg-slate-900 hover:bg-slate-800 text-slate-500 hover:text-blue-400 border-slate-800'
+                }`}
+                title={isAdmin ? "Studio Administrateur (Actif)" : "Espace Administrateur (Aliou Mbow)"}
+              >
+                {isAdmin ? <Shield className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+              </button>
+            )}
             <button
               onClick={scrollToTop}
               className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition-colors ml-2"

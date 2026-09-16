@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Send, Linkedin, MessageSquare } from 'lucide-react';
+import { Menu, X, Send, Linkedin, MessageSquare, Lock, Shield } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { useProfilePhoto } from '../utils/photoStorage';
 
 interface NavbarProps {
   onOpenContact: () => void;
   onOpenWhatsApp?: () => void;
+  isAdmin?: boolean;
+  onOpenAdmin?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenWhatsApp }) => {
+export const Navbar: React.FC<NavbarProps> = ({ 
+  onOpenContact, 
+  onOpenWhatsApp,
+  isAdmin = false,
+  onOpenAdmin,
+}) => {
   const { photoUrl } = useProfilePhoto();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    // Strip any hash from the URL to keep the address bar clean (e.g. www.cvaliou.com without /#hero)
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
@@ -21,12 +33,27 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenWhatsApp })
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleNavClick = (e: React.MouseEvent, targetId: string) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+
+    const el = document.getElementById(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Keep the address bar clean without /#hero or hash suffix
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  };
+
   const navLinks = [
-    { name: 'Accueil', href: '#hero' },
-    { name: 'Profil', href: '#about' },
-    { name: 'Compétences', href: '#skills' },
-    { name: 'Projets Drive', href: '#projects' },
-    { name: 'Engagements', href: '#experience' },
+    { name: 'Accueil', targetId: 'hero' },
+    { name: 'Profil', targetId: 'about' },
+    { name: 'Compétences', targetId: 'skills' },
+    { name: 'Projets Drive', targetId: 'projects' },
+    { name: 'Contact', targetId: 'contact' },
   ];
 
   return (
@@ -39,7 +66,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenWhatsApp })
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Brand with photo */}
-        <a href="#hero" className="flex items-center gap-3 group">
+        <a 
+          href="#hero" 
+          onClick={(e) => handleNavClick(e, 'hero')}
+          className="flex items-center gap-3 group cursor-pointer"
+        >
           <div className="relative">
             <img
               src={photoUrl}
@@ -61,28 +92,45 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenWhatsApp })
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-1 bg-slate-800/50 p-1.5 rounded-full border border-slate-700/60 backdrop-blur-sm">
           {navLinks.map((link) => (
-            <a
+            <button
               key={link.name}
-              href={link.href}
-              className="px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-full transition-colors font-medium"
+              onClick={(e) => handleNavClick(e, link.targetId)}
+              className="px-3.5 py-1.5 text-xs lg:text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-full transition-colors font-medium cursor-pointer"
             >
               {link.name}
-            </a>
+            </button>
           ))}
         </nav>
 
         {/* CTA Buttons */}
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-2.5">
+          {/* Admin Studio Trigger */}
+          {onOpenAdmin && (
+            <button
+              onClick={onOpenAdmin}
+              className={`p-2 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
+                isAdmin
+                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20'
+                  : 'bg-slate-800/60 border-slate-700 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+              }`}
+              title={isAdmin ? "Studio Administrateur d'Aliou Mbow (Actif)" : "Espace Administrateur (Aliou Mbow)"}
+            >
+              {isAdmin ? <Shield className="w-3.5 h-3.5 text-emerald-400" /> : <Lock className="w-3.5 h-3.5 text-slate-400" />}
+              <span>{isAdmin ? 'Admin Actif' : 'Admin'}</span>
+            </button>
+          )}
+
           {onOpenWhatsApp && (
             <button
               onClick={onOpenWhatsApp}
-              className="p-2 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 rounded-lg transition-colors flex items-center gap-1.5 text-sm font-medium border border-emerald-500/20"
+              className="p-2 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 rounded-lg transition-colors flex items-center gap-1.5 text-sm font-medium border border-emerald-500/20 cursor-pointer"
               title="Téléphone & WhatsApp : +221 78 333 31 75"
             >
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp</span>
             </button>
           )}
+
           <a
             href={personalInfo.linkedin}
             target="_blank"
@@ -93,9 +141,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenWhatsApp })
             <Linkedin className="w-4 h-4 text-blue-400" />
             <span>LinkedIn</span>
           </a>
+
           <button
             onClick={onOpenContact}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 rounded-lg shadow-sm shadow-blue-500/30 transition-all hover:shadow-blue-500/50"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 rounded-lg shadow-sm shadow-blue-500/30 transition-all hover:shadow-blue-500/50 cursor-pointer"
           >
             <Send className="w-4 h-4" />
             <span>Me Contacter</span>
@@ -104,6 +153,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenWhatsApp })
 
         {/* Mobile toggle */}
         <div className="md:hidden flex items-center gap-2">
+          {onOpenAdmin && (
+            <button
+              onClick={onOpenAdmin}
+              className={`p-2 rounded-lg border text-xs font-semibold flex items-center gap-1 ${
+                isAdmin
+                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                  : 'bg-slate-800 border-slate-700 text-slate-400'
+              }`}
+              title="Administration"
+            >
+              {isAdmin ? <Shield className="w-3.5 h-3.5 text-emerald-400" /> : <Lock className="w-3.5 h-3.5 text-slate-400" />}
+            </button>
+          )}
+
           {onOpenWhatsApp && (
             <button
               onClick={onOpenWhatsApp}
@@ -128,17 +191,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenWhatsApp })
         <div className="md:hidden bg-slate-900 border-b border-slate-800 px-4 pt-3 pb-6 space-y-3">
           <div className="flex flex-col space-y-1">
             {navLinks.map((link) => (
-              <a
+              <button
                 key={link.name}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 text-slate-200 hover:bg-slate-800 rounded-lg text-base font-medium"
+                onClick={(e) => handleNavClick(e, link.targetId)}
+                className="w-full text-left px-3 py-2 text-slate-200 hover:bg-slate-800 rounded-lg text-base font-medium cursor-pointer"
               >
                 {link.name}
-              </a>
+              </button>
             ))}
           </div>
           <div className="pt-3 border-t border-slate-800 flex flex-col gap-2">
+            {onOpenAdmin && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAdmin();
+                }}
+                className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-300 bg-slate-800 border border-slate-700 rounded-lg"
+              >
+                <Shield className="w-4 h-4 text-blue-400" />
+                <span>{isAdmin ? 'Ouvrir le Studio Administrateur' : 'Espace Administrateur'}</span>
+              </button>
+            )}
             {onOpenWhatsApp && (
               <button
                 onClick={() => {
@@ -165,7 +239,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenWhatsApp })
                 setMobileMenuOpen(false);
                 onOpenContact();
               }}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg shadow-sm"
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg shadow-sm cursor-pointer"
             >
               <Send className="w-4 h-4" />
               <span>Me Contacter</span>
@@ -176,4 +250,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenWhatsApp })
     </header>
   );
 };
+
+
 

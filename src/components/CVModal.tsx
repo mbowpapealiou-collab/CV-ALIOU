@@ -7,9 +7,15 @@ interface CVModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenWhatsApp?: () => void;
+  isAdmin?: boolean;
 }
 
-export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose, onOpenWhatsApp }) => {
+export const CVModal: React.FC<CVModalProps> = ({ 
+  isOpen, 
+  onClose, 
+  onOpenWhatsApp,
+  isAdmin = false,
+}) => {
   const { photoUrl, uploadPhoto } = useProfilePhoto();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -30,14 +36,16 @@ export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose, onOpenWhatsAp
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-md overflow-y-auto">
       <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl my-6 overflow-hidden">
         
-        {/* Hidden photo file input */}
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handlePhotoUpload}
-          accept="image/*"
-          className="hidden"
-        />
+        {/* Hidden photo file input (admin only) */}
+        {isAdmin && (
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handlePhotoUpload}
+            accept="image/*"
+            className="hidden"
+          />
+        )}
 
         {/* Top bar with actions */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 sm:px-6 py-3.5 sm:py-4 bg-slate-800 border-b border-slate-700">
@@ -125,14 +133,16 @@ export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose, onOpenWhatsAp
                 alt="Aliou Mbow"
                 className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover object-top border-2 border-blue-500 shadow-xl"
               />
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="absolute bottom-1 right-1 p-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white shadow-md border border-white/20 transition-all opacity-80 group-hover:opacity-100"
-                title="Changer la photo du CV"
-              >
-                <Camera className="w-3.5 h-3.5" />
-              </button>
+              {isAdmin && (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute bottom-1 right-1 p-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white shadow-md border border-white/20 transition-all opacity-80 group-hover:opacity-100 cursor-pointer"
+                  title="Changer la photo du CV (Admin)"
+                >
+                  <Camera className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
           </div>
 

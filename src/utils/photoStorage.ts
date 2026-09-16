@@ -51,7 +51,7 @@ export function resetProfilePhoto(): void {
 }
 
 // Auto-compress and resize image to ensure it works on all mobile devices and stays within browser quotas
-function compressImage(file: File, maxDimension = 800, quality = 0.85): Promise<string> {
+export function compressImage(file: File, maxDimension = 800, quality = 0.85): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (readerEvent) => {
@@ -93,6 +93,92 @@ function compressImage(file: File, maxDimension = 800, quality = 0.85): Promise<
     reader.onerror = (err) => reject(err);
     reader.readAsDataURL(file);
   });
+}
+
+// Project photos storage helpers
+const PROJECT_EVENT_NAME = 'aliou_project_photo_updated';
+
+export function getProjectPhoto(projectId: string, defaultImage: string): string {
+  try {
+    const saved = localStorage.getItem(`aliou_proj_${projectId}`);
+    if (
+      saved &&
+      (saved.startsWith('data:image/jpeg') ||
+       saved.startsWith('data:image/png') ||
+       saved.startsWith('data:image/webp'))
+    ) {
+      return saved;
+    }
+  } catch (err) {
+    console.error('Erreur lecture photo projet', err);
+  }
+  return defaultImage;
+}
+
+export function saveProjectPhoto(projectId: string, dataUrl: string): void {
+  if (
+    !dataUrl.startsWith('data:image/jpeg') &&
+    !dataUrl.startsWith('data:image/png') &&
+    !dataUrl.startsWith('data:image/webp')
+  ) {
+    console.error('[Sécurité] Format image invalide');
+    return;
+  }
+  try {
+    localStorage.setItem(`aliou_proj_${projectId}`, dataUrl);
+    window.dispatchEvent(new CustomEvent(PROJECT_EVENT_NAME, { detail: { projectId, dataUrl } }));
+  } catch (err) {
+    console.error('Erreur sauvegarde photo projet', err);
+  }
+}
+
+export function resetProjectPhoto(projectId: string): void {
+  try {
+    localStorage.removeItem(`aliou_proj_${projectId}`);
+    window.dispatchEvent(new CustomEvent(PROJECT_EVENT_NAME, { detail: { projectId, dataUrl: null } }));
+  } catch (err) {
+    console.error('Erreur reset photo projet', err);
+  }
+}
+
+export function useProjectPhotos() {
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  useEffect(() => {
+    const handler = () => setRefreshKey((prev) => prev + 1);
+    window.addEventListener(PROJECT_EVENT_NAME, handler);
+    window.addEventListener('storage', handler);
+    return () => {
+      window.removeEventListener(PROJECT_EVENT_NAME, handler);
+      window.removeEventListener('storage', handler);
+    };
+  }, []);
+
+  const getPhoto = (projectId: string, defaultImage: string) => {
+    return getProjectPhoto(projectId, defaultImage);
+  };
+
+  const uploadProjectPhoto = async (projectId: string, file: File): Promise<boolean> => {
+    if (!file.type.startsWith('image/')) {
+      alert('Veuillez sélectionner une image valide.');
+      return false;
+    }
+    try {
+      const compressed = await compressImage(file, 900, 0.85);
+      saveProjectPhoto(projectId, compressed);
+      return true;
+    } catch (err) {
+      console.error('Erreur upload photo projet:', err);
+      return false;
+    }
+  };
+
+  return {
+    refreshKey,
+    getPhoto,
+    uploadProjectPhoto,
+    resetProjectPhoto,
+  };
 }
 
 export function useProfilePhoto() {

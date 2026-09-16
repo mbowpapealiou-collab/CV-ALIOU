@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ArrowRight, Download, CheckCircle, Sparkles, MapPin, Briefcase, ExternalLink, HardDrive, Camera, RotateCcw, MessageSquare } from 'lucide-react';
+import { ArrowRight, Download, CheckCircle, Sparkles, MapPin, Briefcase, ExternalLink, HardDrive, Camera, RotateCcw, MessageSquare, Shield, Lock } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 import { useProfilePhoto } from '../utils/photoStorage';
 
@@ -8,13 +8,17 @@ interface HeroProps {
   onDownloadCV: () => void;
   onOpenDrive?: () => void;
   onOpenWhatsApp?: () => void;
+  isAdmin?: boolean;
+  onOpenAdmin?: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({
   onOpenContact,
   onDownloadCV,
   onOpenDrive,
-  onOpenWhatsApp
+  onOpenWhatsApp,
+  isAdmin = false,
+  onOpenAdmin,
 }) => {
   const { photoUrl, isCustom, uploadPhoto, resetPhoto } = useProfilePhoto();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -143,15 +147,28 @@ export const Hero: React.FC<HeroProps> = ({
                     Profil Officiel
                   </div>
 
-                  {/* Top Left: Quick Camera Button always accessible on mobile and desktop */}
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="absolute top-3 left-3 p-2 rounded-full bg-slate-900/85 hover:bg-blue-600 text-white border border-slate-700 backdrop-blur-md shadow-md transition-colors"
-                    title="Changer de photo"
-                    aria-label="Changer de photo"
-                  >
-                    <Camera className="w-4 h-4" />
-                  </button>
+                  {/* Top Left: Admin Quick Camera Button (Only if Admin) or Admin Login Key */}
+                  {isAdmin ? (
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="absolute top-3 left-3 p-2 rounded-full bg-blue-600 hover:bg-blue-500 text-white border border-blue-400/50 backdrop-blur-md shadow-md transition-colors cursor-pointer"
+                      title="Changer ma photo de profil (Admin)"
+                      aria-label="Changer de photo"
+                    >
+                      <Camera className="w-4 h-4" />
+                    </button>
+                  ) : (
+                    onOpenAdmin && (
+                      <button
+                        onClick={onOpenAdmin}
+                        className="absolute top-3 left-3 p-2 rounded-full bg-slate-900/60 hover:bg-slate-900 text-slate-400 hover:text-white border border-slate-700/60 backdrop-blur-md transition-colors cursor-pointer opacity-70 hover:opacity-100"
+                        title="Espace Administrateur (Aliou Mbow)"
+                        aria-label="Espace Administrateur"
+                      >
+                        <Lock className="w-3.5 h-3.5" />
+                      </button>
+                    )
+                  )}
 
                   {uploadSuccess && (
                     <div className="absolute top-12 left-3 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-semibold shadow-lg animate-bounce">
@@ -166,34 +183,80 @@ export const Hero: React.FC<HeroProps> = ({
                   </div>
                 </div>
 
-                {/* Mobile & Desktop Photo Action Bar */}
+                {/* Photo Action Bar */}
                 <div className="space-y-3">
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={isUploading}
-                    className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 shadow-md transition-all active:scale-98"
-                  >
-                    <Camera className="w-4 h-4" />
-                    <span>{isUploading ? 'Traitement de la photo...' : 'Changer / Uploader ma photo'}</span>
-                  </button>
-
-                  {isCustom && (
-                    <div className="flex items-center justify-between text-xs px-1">
-                      <span className="text-emerald-400 flex items-center gap-1">
-                        <CheckCircle className="w-3 h-3" />
-                        Photo personnalisée
-                      </span>
+                  {isAdmin ? (
+                    <>
                       <button
-                        onClick={resetPhoto}
-                        className="text-slate-400 hover:text-rose-400 inline-flex items-center gap-1 transition-colors"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isUploading}
+                        className="w-full min-h-[44px] py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 shadow-md transition-all active:scale-98 cursor-pointer"
                       >
-                        <RotateCcw className="w-3 h-3" />
-                        <span>Rétablir défaut</span>
+                        <Camera className="w-4 h-4" />
+                        <span>{isUploading ? 'Traitement de la photo...' : 'Uploader ma photo (Admin)'}</span>
                       </button>
+
+                      {isCustom && (
+                        <div className="flex items-center justify-between text-xs px-1">
+                          <span className="text-emerald-400 flex items-center gap-1">
+                            <CheckCircle className="w-3 h-3" />
+                            Photo personnalisée
+                          </span>
+                          <button
+                            onClick={resetPhoto}
+                            className="text-slate-400 hover:text-rose-400 inline-flex items-center gap-1 transition-colors cursor-pointer"
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                            <span>Rétablir défaut</span>
+                          </button>
+                        </div>
+                      )}
+
+                      {onOpenAdmin && (
+                        <button
+                          onClick={onOpenAdmin}
+                          className="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-blue-400 hover:text-blue-300 border border-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                        >
+                          <Shield className="w-3.5 h-3.5" />
+                          <span>Ouvrir le Studio Administrateur</span>
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    /* Public Visitor view: clean, professional, no unauthorized upload controls */
+                    <div className="space-y-2.5 pt-1">
+                      <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300 space-y-1">
+                        <div className="font-semibold text-white flex items-center gap-1.5">
+                          <CheckCircle className="w-3.5 h-3.5 text-blue-400" />
+                          <span>Profil Professionnel Certifié</span>
+                        </div>
+                        <p className="text-slate-400 text-[11px] leading-relaxed">
+                          Université Iba Der Thiam de Thiès — UFR Sciences Économiques et Sociales
+                        </p>
+                      </div>
+
+                      <div className="flex gap-2">
+                        {onOpenWhatsApp && (
+                          <button
+                            onClick={onOpenWhatsApp}
+                            className="flex-1 py-2 px-3 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                          >
+                            <MessageSquare className="w-3.5 h-3.5" />
+                            <span>WhatsApp</span>
+                          </button>
+                        )}
+                        <button
+                          onClick={onDownloadCV}
+                          className="flex-1 py-2 px-3 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                          <span>Voir le CV</span>
+                        </button>
+                      </div>
                     </div>
                   )}
 
-                  {/* Hidden file input supporting camera & files */}
+                  {/* Hidden file input supporting camera & files (admin only) */}
                   <input
                     ref={fileInputRef}
                     id="hero-photo-input"

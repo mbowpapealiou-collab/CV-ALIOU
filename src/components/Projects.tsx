@@ -1,14 +1,24 @@
-import React, { useState } from 'react';
-import { FolderGit2, ExternalLink, ArrowUpRight, HardDrive, Sparkles, FolderOpen, Edit3, Check, FolderSearch } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { FolderGit2, ExternalLink, ArrowUpRight, HardDrive, Sparkles, FolderOpen, Edit3, Check, FolderSearch, Camera } from 'lucide-react';
 import { projectsData, personalInfo } from '../data/portfolioData';
 import { Project } from '../types';
 import { sanitizeSafeUrl, isValidDriveUrl } from '../utils/security';
+import { useProjectPhotos } from '../utils/photoStorage';
 
 interface ProjectsProps {
   onOpenDriveModal?: (folderId?: string) => void;
+  isAdmin?: boolean;
+  onOpenAdmin?: () => void;
 }
 
-export const Projects: React.FC<ProjectsProps> = ({ onOpenDriveModal }) => {
+export const Projects: React.FC<ProjectsProps> = ({ 
+  onOpenDriveModal,
+  isAdmin = false,
+  onOpenAdmin,
+}) => {
+  const { getPhoto, uploadProjectPhoto } = useProjectPhotos();
+  const [uploadingProjId, setUploadingProjId] = useState<string | null>(null);
+  const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const [activeCategory, setActiveCategory] = useState<string>('Tous');
   const [customDriveUrl, setCustomDriveUrl] = useState<string>(() => {
     try {
@@ -185,7 +195,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenDriveModal }) => {
                 className="relative h-52 sm:h-60 w-full overflow-hidden bg-slate-800 block cursor-pointer"
               >
                 <img
-                  src={project.image}
+                  src={getPhoto(project.id, project.image)}
                   alt={project.title}
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 opacity-85 group-hover:opacity-100"
                   referrerPolicy="no-referrer"
@@ -195,12 +205,43 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenDriveModal }) => {
                     {project.category}
                   </span>
                 </div>
-                <div className="absolute top-4 right-4">
+                <div className="absolute top-4 right-4 flex items-center gap-2">
                   <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-600/90 backdrop-blur-md text-white border border-blue-500/80 flex items-center gap-1 shadow-md">
                     <HardDrive className="w-3 h-3" />
                     Google Drive
                   </span>
                 </div>
+
+                {/* Admin Quick Upload Button on Card */}
+                {isAdmin && (
+                  <div
+                    className="absolute bottom-3 right-3 z-10"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <button
+                      onClick={() => fileInputRefs.current[project.id]?.click()}
+                      className="px-3 py-1.5 rounded-xl bg-slate-950/90 hover:bg-blue-600 text-white border border-slate-700/80 text-xs font-medium flex items-center gap-1.5 shadow-xl backdrop-blur-md transition-all cursor-pointer"
+                      title="Changer la photo de ce projet"
+                    >
+                      <Camera className="w-3.5 h-3.5 text-blue-400" />
+                      <span>{uploadingProjId === project.id ? 'Chargement...' : 'Modifier photo'}</span>
+                    </button>
+                    <input
+                      ref={(el) => (fileInputRefs.current[project.id] = el)}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        setUploadingProjId(project.id);
+                        await uploadProjectPhoto(project.id, file);
+                        setUploadingProjId(null);
+                        e.target.value = '';
+                      }}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Content Body */}
