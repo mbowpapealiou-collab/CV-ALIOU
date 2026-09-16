@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Send, Linkedin, Mail, ExternalLink } from 'lucide-react';
+import { Menu, X, Send, Linkedin, MessageSquare } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import { useProfilePhoto } from '../utils/photoStorage';
 
 interface NavbarProps {
   onOpenContact: () => void;
+  onOpenWhatsApp?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenWhatsApp }) => {
+  const { photoUrl } = useProfilePhoto();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -39,13 +42,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
         <a href="#hero" className="flex items-center gap-3 group">
           <div className="relative">
             <img
-              src="/photo.jpg"
+              src={photoUrl}
               alt="Aliou Mbow"
               className="w-11 h-11 rounded-full object-cover object-top ring-2 ring-blue-500 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform"
-              onError={(e) => {
-                // Fallback to initials if image loading fails
-                (e.target as HTMLElement).style.display = 'none';
-              }}
             />
             <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-slate-900 rounded-full" title="Disponible" />
           </div>
@@ -74,6 +73,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
 
         {/* CTA Buttons */}
         <div className="hidden lg:flex items-center gap-3">
+          {onOpenWhatsApp && (
+            <button
+              onClick={onOpenWhatsApp}
+              className="p-2 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 rounded-lg transition-colors flex items-center gap-1.5 text-sm font-medium border border-emerald-500/20"
+              title="Téléphone & WhatsApp : +221 78 333 31 75"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>WhatsApp</span>
+            </button>
+          )}
           <a
             href={personalInfo.linkedin}
             target="_blank"
@@ -95,6 +104,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
 
         {/* Mobile toggle */}
         <div className="md:hidden flex items-center gap-2">
+          {onOpenWhatsApp && (
+            <button
+              onClick={onOpenWhatsApp}
+              className="p-2 text-emerald-400 bg-emerald-500/10 rounded-lg border border-emerald-500/20"
+              title="WhatsApp"
+            >
+              <MessageSquare className="w-5 h-5" />
+            </button>
+          )}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 text-slate-300 hover:text-white bg-slate-800/60 rounded-lg border border-slate-700"
@@ -121,6 +139,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
             ))}
           </div>
           <div className="pt-3 border-t border-slate-800 flex flex-col gap-2">
+            {onOpenWhatsApp && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenWhatsApp();
+                }}
+                className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 rounded-lg"
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>WhatsApp : +221 78 333 31 75</span>
+              </button>
+            )}
             <a
               href={personalInfo.linkedin}
               target="_blank"

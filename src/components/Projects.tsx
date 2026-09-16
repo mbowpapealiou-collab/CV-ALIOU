@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { FolderGit2, ExternalLink, ArrowUpRight, HardDrive, Sparkles, FolderOpen, Edit3, Check } from 'lucide-react';
+import { FolderGit2, ExternalLink, ArrowUpRight, HardDrive, Sparkles, FolderOpen, Edit3, Check, FolderSearch } from 'lucide-react';
 import { projectsData, personalInfo } from '../data/portfolioData';
 import { Project } from '../types';
 
-export const Projects: React.FC = () => {
+interface ProjectsProps {
+  onOpenDriveModal?: (folderId?: string) => void;
+}
+
+export const Projects: React.FC<ProjectsProps> = ({ onOpenDriveModal }) => {
   const [activeCategory, setActiveCategory] = useState<string>('Tous');
   const [customDriveUrl, setCustomDriveUrl] = useState<string>(() => {
     return localStorage.getItem('aliou_drive_url') || personalInfo.googleDriveProjectsUrl;
@@ -26,6 +30,21 @@ export const Projects: React.FC = () => {
     setIsEditingDrive(false);
   };
 
+  const getFolderIdForProject = (projId: string) => {
+    switch (projId) {
+      case 'proj-1':
+        return 'folder-access';
+      case 'proj-2':
+        return 'folder-intellia';
+      case 'proj-3':
+        return 'folder-marketing';
+      case 'proj-4':
+        return 'folder-management';
+      default:
+        return 'folder-access';
+    }
+  };
+
   return (
     <section id="projects" className="py-20 bg-slate-900/40 border-y border-slate-800/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,7 +59,7 @@ export const Projects: React.FC = () => {
             Mes Travaux & Projets sur Google Drive
           </h2>
           <p className="mt-4 text-base text-slate-400">
-            Retrouvez tous mes rapports, bases de données Access, études de cas de gestion et livrables marketing centralisés dans mon espace Google Drive.
+            Retrouvez tous mes rapports, bases de données Access, études de cas de gestion et livrables marketing centralisés dans mon espace Google Drive ({personalInfo.email}).
           </p>
         </div>
 
@@ -56,24 +75,36 @@ export const Projects: React.FC = () => {
                   Dossier Projets Complet (Google Drive)
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300 mt-1">
-                  Accédez en un clic à l'ensemble des fichiers sources, documents et présentations.
+                  Explorez directement les dossiers de test connectés au compte <span className="text-blue-300 font-semibold">{personalInfo.email}</span>.
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+            <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
+              {onOpenDriveModal && (
+                <button
+                  onClick={() => onOpenDriveModal()}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-500/30 transition-all hover:scale-[1.02]"
+                >
+                  <FolderOpen className="w-4 h-4" />
+                  <span>Consulter sur Drive</span>
+                </button>
+              )}
+
               <a
                 href={customDriveUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-500/30 transition-all hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors text-xs"
+                title="Ouvrir dans un nouvel onglet Google Drive"
               >
-                <span>Ouvrir Google Drive</span>
-                <ExternalLink className="w-4 h-4" />
+                <span>Lien direct web</span>
+                <ExternalLink className="w-3.5 h-3.5" />
               </a>
+
               <button
                 onClick={() => setIsEditingDrive(!isEditingDrive)}
-                className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 transition-colors"
+                className="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 transition-colors"
                 title="Personnaliser le lien Google Drive"
               >
                 <Edit3 className="w-4 h-4" />
@@ -127,11 +158,9 @@ export const Projects: React.FC = () => {
               className="group rounded-3xl bg-slate-900 border border-slate-800 hover:border-blue-500/50 overflow-hidden shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col"
             >
               {/* Project Image banner */}
-              <a
-                href={project.driveUrl || customDriveUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="relative h-52 sm:h-60 w-full overflow-hidden bg-slate-800 block"
+              <div
+                onClick={() => onOpenDriveModal ? onOpenDriveModal(getFolderIdForProject(project.id)) : window.open(project.driveUrl || customDriveUrl, '_blank')}
+                className="relative h-52 sm:h-60 w-full overflow-hidden bg-slate-800 block cursor-pointer"
               >
                 <img
                   src={project.image}
@@ -150,22 +179,20 @@ export const Projects: React.FC = () => {
                     Google Drive
                   </span>
                 </div>
-              </a>
+              </div>
 
               {/* Content Body */}
               <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
                 <div>
-                  <a
-                    href={project.driveUrl || customDriveUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group-hover:text-blue-400 transition-colors"
+                  <div
+                    onClick={() => onOpenDriveModal ? onOpenDriveModal(getFolderIdForProject(project.id)) : window.open(project.driveUrl || customDriveUrl, '_blank')}
+                    className="cursor-pointer"
                   >
                     <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors flex items-center justify-between">
                       <span>{project.title}</span>
                       <ArrowUpRight className="w-5 h-5 text-slate-500 group-hover:text-blue-400 transition-colors shrink-0" />
                     </h3>
-                  </a>
+                  </div>
 
                   <p className="mt-3 text-sm text-slate-400 leading-relaxed">
                     {project.description}
@@ -188,18 +215,30 @@ export const Projects: React.FC = () => {
                 <div className="mt-6 pt-5 border-t border-slate-800/80 flex items-center justify-between">
                   <span className="text-xs text-slate-400 flex items-center gap-1.5">
                     <FolderOpen className="w-3.5 h-3.5 text-blue-400" />
-                    Dossier disponible en ligne
+                    {personalInfo.email}
                   </span>
 
-                  <a
-                    href={project.driveUrl || customDriveUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 px-3 py-1.5 rounded-lg border border-blue-500/20 transition-all"
-                  >
-                    <span>Consulter sur Google Drive</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
+                  <div className="flex items-center gap-2">
+                    {onOpenDriveModal && (
+                      <button
+                        onClick={() => onOpenDriveModal(getFolderIdForProject(project.id))}
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-lg shadow-sm transition-all"
+                      >
+                        <FolderOpen className="w-3.5 h-3.5" />
+                        <span>Consulter sur Drive</span>
+                      </button>
+                    )}
+
+                    <a
+                      href={project.driveUrl || customDriveUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors"
+                      title="Ouvrir dans Google Drive Web"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

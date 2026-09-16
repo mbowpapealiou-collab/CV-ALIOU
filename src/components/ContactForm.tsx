@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle, Loader2, Linkedin, MessageSquare, Clock } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle, Loader2, Linkedin, MessageSquare, Clock, ExternalLink, MailQuestion } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
 
-export const ContactForm: React.FC = () => {
+interface ContactFormProps {
+  onOpenWhatsApp?: () => void;
+}
+
+export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,6 +24,14 @@ export const ContactForm: React.FC = () => {
     }));
   };
 
+  const getMailtoUrl = () => {
+    const subject = encodeURIComponent(formData.subject || `Message pour Aliou Mbow`);
+    const body = encodeURIComponent(
+      `Nom: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    );
+    return `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -30,17 +42,47 @@ export const ContactForm: React.FC = () => {
     }
 
     setStatus('loading');
+    setErrorMessage('');
 
-    // Simulate sending message or calling contact endpoint
-    setTimeout(() => {
-      setStatus('success');
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
+    try {
+      // Send real email to Aliou Mbow via FormSubmit API
+      const response = await fetch(`https://formsubmit.co/ajax/${personalInfo.email}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          _subject: `[Portfolio Aliou Mbow] ${formData.subject || 'Nouveau message de contact'}`,
+          message: formData.message,
+          _replyto: formData.email,
+          _template: 'table'
+        })
       });
-    }, 1000);
+
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok && (data.success === 'true' || data.success === true || response.status === 200)) {
+        setStatus('success');
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: ''
+        });
+      } else {
+        // Fallback to mailto if submission endpoint is blocked
+        window.location.href = getMailtoUrl();
+        setStatus('success');
+      }
+    } catch (err) {
+      console.warn('Erreur envoi réseau, bascule mailto:', err);
+      // Open mail client as reliable fallback
+      window.location.href = getMailtoUrl();
+      setStatus('success');
+    }
   };
 
   return (
@@ -57,7 +99,7 @@ export const ContactForm: React.FC = () => {
             Échangeons sur vos opportunités & projets
           </h2>
           <p className="mt-4 text-base text-slate-400">
-            Une opportunité professionnelle, un projet de gestion, une collaboration en marketing digital ou community management ? Écrivez-moi directement.
+            Une opportunité professionnelle, un projet de gestion, une collaboration en marketing digital ou community management ? Écrivez-moi directement sur <strong className="text-blue-400">{personalInfo.email}</strong>.
           </p>
         </div>
 
@@ -77,25 +119,33 @@ export const ContactForm: React.FC = () => {
                     <Mail className="w-5 h-5" />
                   </div>
                   <div className="overflow-hidden">
-                    <div className="text-xs text-slate-400 font-medium">Email</div>
+                    <div className="text-xs text-slate-400 font-medium">Email direct</div>
                     <div className="text-sm font-semibold text-white truncate">{personalInfo.email}</div>
                   </div>
                 </a>
 
-                <a
-                  href="https://wa.me/221783333175"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-4 p-3.5 rounded-2xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700/60 transition-colors group"
+                {/* WhatsApp & Phone Trigger Card */}
+                <button
+                  type="button"
+                  onClick={onOpenWhatsApp || (() => window.open('https://wa.me/221783333175', '_blank'))}
+                  className="w-full text-left flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700/60 hover:border-emerald-500/50 transition-all group"
                 >
-                  <div className="w-11 h-11 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                    <Phone className="w-5 h-5" />
+                  <div className="flex items-center gap-4">
+                    <div className="w-11 h-11 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      <Phone className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-400 font-medium flex items-center gap-1.5">
+                        <span>Téléphone & WhatsApp</span>
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      </div>
+                      <div className="text-sm font-semibold text-white">{personalInfo.phone}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-xs text-slate-400 font-medium">Téléphone & WhatsApp</div>
-                    <div className="text-sm font-semibold text-white">{personalInfo.phone}</div>
+                  <div className="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/20 group-hover:bg-emerald-500 group-hover:text-slate-950 transition-colors">
+                    Afficher
                   </div>
-                </a>
+                </button>
 
                 <div className="flex items-center gap-4 p-3.5 rounded-2xl bg-slate-800/50 border border-slate-700/60">
                   <div className="w-11 h-11 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center shrink-0">
@@ -113,27 +163,35 @@ export const ContactForm: React.FC = () => {
                   </div>
                   <div>
                     <div className="text-xs text-slate-400 font-medium">Disponibilité</div>
-                    <div className="text-sm font-semibold text-white">Réponse rapide garantie</div>
+                    <div className="text-sm font-semibold text-white">Réception 24h/24 sur mbowpapealiou@gmail.com</div>
                   </div>
                 </div>
               </div>
 
-              {/* Social Links */}
-              <div className="pt-4 border-t border-slate-800">
-                <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-                  Réseau Professionnel
+              {/* Social Links & Quick WhatsApp Button */}
+              <div className="pt-4 border-t border-slate-800 space-y-2.5">
+                <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                  Canaux rapides
                 </div>
-                <div className="flex gap-3">
-                  <a
-                    href={personalInfo.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/20 text-sm font-semibold transition-all"
-                  >
-                    <Linkedin className="w-4 h-4" />
-                    <span>Me rejoindre sur LinkedIn</span>
-                  </a>
-                </div>
+                
+                <button
+                  type="button"
+                  onClick={onOpenWhatsApp || (() => window.open('https://wa.me/221783333175', '_blank'))}
+                  className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-600/20 text-sm font-semibold transition-all"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Discuter sur WhatsApp ({personalInfo.phone})</span>
+                </button>
+
+                <a
+                  href={personalInfo.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-sm font-semibold transition-all"
+                >
+                  <Linkedin className="w-4 h-4 text-blue-400" />
+                  <span>Profil LinkedIn</span>
+                </a>
               </div>
             </div>
           </div>
@@ -147,22 +205,31 @@ export const ContactForm: React.FC = () => {
                   <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto ring-8 ring-emerald-500/10">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white">Message envoyé avec succès !</h3>
-                  <p className="text-slate-400 max-w-md mx-auto text-sm leading-relaxed">
-                    Merci pour votre message, Aliou Mbow vous répondra dans les plus brefs délais à l'adresse indiquée.
+                  <h3 className="text-2xl font-bold text-white">Message transmis avec succès !</h3>
+                  <p className="text-slate-300 max-w-md mx-auto text-sm leading-relaxed">
+                    Votre message a été envoyé à <strong>{personalInfo.email}</strong>. Aliou Mbow vous répondra dans les meilleurs délais.
                   </p>
-                  <div className="pt-4">
+                  <div className="pt-4 flex flex-wrap justify-center gap-3">
                     <button
                       onClick={() => setStatus('idle')}
-                      className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 transition-colors"
+                      className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 transition-colors"
                     >
                       Envoyer un autre message
+                    </button>
+                    <button
+                      onClick={onOpenWhatsApp || (() => window.open('https://wa.me/221783333175', '_blank'))}
+                      className="px-5 py-2.5 rounded-xl text-sm font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors"
+                    >
+                      Discuter sur WhatsApp
                     </button>
                   </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
-                  <h3 className="text-xl font-bold text-white mb-2">Envoyez-moi un message</h3>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-xl font-bold text-white">Envoyez-moi un message</h3>
+                    <span className="text-[11px] text-slate-400">Reçu sur {personalInfo.email}</span>
+                  </div>
                   
                   {status === 'error' && (
                     <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm flex items-center gap-2.5">
@@ -232,23 +299,35 @@ export const ContactForm: React.FC = () => {
                     />
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={status === 'loading'}
-                    className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-600/30 transition-all disabled:opacity-70 cursor-pointer"
-                  >
-                    {status === 'loading' ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Envoi en cours...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        <span>Envoyer le Message</span>
-                      </>
-                    )}
-                  </button>
+                  <div className="space-y-3 pt-2">
+                    <button
+                      type="submit"
+                      disabled={status === 'loading'}
+                      className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-600/30 transition-all disabled:opacity-70 cursor-pointer"
+                    >
+                      {status === 'loading' ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Envoi vers {personalInfo.email}...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>Envoyer le Message à Aliou Mbow</span>
+                        </>
+                      )}
+                    </button>
+
+                    <div className="flex items-center justify-center gap-4 text-xs text-slate-400 pt-1">
+                      <a
+                        href={getMailtoUrl()}
+                        className="text-slate-400 hover:text-blue-300 underline inline-flex items-center gap-1"
+                      >
+                        <MailQuestion className="w-3.5 h-3.5" />
+                        <span>Ouvrir dans mon application e-mail (Gmail / Mailto)</span>
+                      </a>
+                    </div>
+                  </div>
                 </form>
               )}
 

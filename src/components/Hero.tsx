@@ -1,13 +1,45 @@
-import React from 'react';
-import { ArrowRight, Download, CheckCircle, Sparkles, MapPin, Briefcase, ExternalLink, FolderGit2 } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { ArrowRight, Download, CheckCircle, Sparkles, MapPin, Briefcase, ExternalLink, HardDrive, Camera, RotateCcw, MessageSquare } from 'lucide-react';
 import { personalInfo } from '../data/portfolioData';
+import { useProfilePhoto } from '../utils/photoStorage';
 
 interface HeroProps {
   onOpenContact: () => void;
   onDownloadCV: () => void;
+  onOpenDrive?: () => void;
+  onOpenWhatsApp?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenContact, onDownloadCV }) => {
+export const Hero: React.FC<HeroProps> = ({
+  onOpenContact,
+  onDownloadCV,
+  onOpenDrive,
+  onOpenWhatsApp
+}) => {
+  const { photoUrl, isCustom, uploadPhoto, resetPhoto } = useProfilePhoto();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIsUploading(true);
+      try {
+        const ok = await uploadPhoto(file);
+        if (ok) {
+          setUploadSuccess(true);
+          setTimeout(() => setUploadSuccess(false), 3000);
+        }
+      } finally {
+        setIsUploading(false);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      }
+    }
+  };
+
   return (
     <section id="hero" className="relative pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden">
       {/* Background subtle mesh gradients */}
@@ -57,19 +89,26 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact, onDownloadCV }) => {
                 <Briefcase className="w-4 h-4 text-emerald-400" />
                 Université Iba Der Thiam de Thiès
               </span>
+              {onOpenWhatsApp && (
+                <button
+                  onClick={onOpenWhatsApp}
+                  className="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-medium hover:underline"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>WhatsApp: {personalInfo.phone}</span>
+                </button>
+              )}
             </div>
 
             {/* Action Buttons */}
             <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4">
-              <a
-                href={personalInfo.googleDriveProjectsUrl}
-                target="_blank"
-                rel="noreferrer"
+              <button
+                onClick={onOpenDrive || (() => window.open(personalInfo.googleDriveProjectsUrl, '_blank'))}
                 className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-600/25 transition-all hover:scale-[1.02]"
               >
-                <span>Voir mes projets (Google Drive)</span>
-                <ExternalLink className="w-4 h-4" />
-              </a>
+                <HardDrive className="w-4 h-4" />
+                <span>Consulter mes projets sur Drive</span>
+              </button>
 
               <button
                 onClick={onDownloadCV}
@@ -81,7 +120,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact, onDownloadCV }) => {
             </div>
           </div>
 
-          {/* Right Column: Visual Card with Photo */}
+          {/* Right Column: Visual Card with Photo & Upload feature */}
           <div className="flex-1 w-full max-w-md lg:max-w-none flex justify-center lg:justify-end">
             <div className="relative w-80 sm:w-96">
               {/* Outer Glow */}
@@ -90,18 +129,60 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact, onDownloadCV }) => {
               {/* Profile Card Container */}
               <div className="relative w-full rounded-3xl bg-gradient-to-b from-slate-800/95 to-slate-900/95 p-6 border border-slate-700/80 shadow-2xl backdrop-blur-md">
                 
-                {/* Photo showcase */}
-                <div className="relative w-full h-72 rounded-2xl overflow-hidden mb-5 border border-slate-700 shadow-inner bg-slate-950">
+                {/* Photo showcase with Upload Overlay */}
+                <div className="relative w-full h-72 rounded-2xl overflow-hidden mb-5 border border-slate-700 shadow-inner bg-slate-950 group">
                   <img
-                    src="/photo.jpg"
+                    src={photoUrl}
                     alt="Aliou Mbow"
                     className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-emerald-400 text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                  
+                  {/* Top badges */}
+                  <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-slate-900/85 backdrop-blur-md border border-slate-700 text-emerald-400 text-xs font-semibold flex items-center gap-1.5 shadow-sm">
                     <CheckCircle className="w-3.5 h-3.5" />
                     Profil Officiel
                   </div>
-                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent p-4">
+
+                  {uploadSuccess && (
+                    <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-semibold shadow-lg animate-bounce">
+                      Photo mise à jour !
+                    </div>
+                  )}
+
+                  {/* Hover Upload overlay */}
+                  <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-4 text-center">
+                    <label
+                      htmlFor="hero-photo-input"
+                      className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md transition-transform hover:scale-105"
+                    >
+                      <Camera className="w-4 h-4" />
+                      <span>{isUploading ? 'Chargement...' : 'Changer la photo'}</span>
+                    </label>
+
+                    {isCustom && (
+                      <button
+                        onClick={resetPhoto}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] border border-slate-700 transition-colors"
+                        title="Restaurer la photo d'origine"
+                      >
+                        <RotateCcw className="w-3 h-3" />
+                        <span>Rétablir photo originale</span>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Hidden file input */}
+                  <input
+                    ref={fileInputRef}
+                    id="hero-photo-input"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+
+                  {/* Name overlay */}
+                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent p-4">
                     <div className="text-white font-bold text-lg">Aliou Mbow</div>
                     <div className="text-xs text-blue-300 font-medium">Management & Marketing Digital</div>
                   </div>
@@ -109,6 +190,17 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact, onDownloadCV }) => {
 
                 {/* Card middle info */}
                 <div className="space-y-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-400">Photo de profil personnalisable :</span>
+                    <label
+                      htmlFor="hero-photo-input"
+                      className="cursor-pointer text-blue-400 hover:text-blue-300 font-semibold inline-flex items-center gap-1 hover:underline"
+                    >
+                      <Camera className="w-3.5 h-3.5" />
+                      <span>Uploader une photo</span>
+                    </label>
+                  </div>
+
                   <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                     Gestion d'activité commerciale (Intellia), conception de bases de données (Access) et stratégie de communication digitale.
                   </p>
@@ -165,4 +257,5 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact, onDownloadCV }) => {
     </section>
   );
 };
+
 

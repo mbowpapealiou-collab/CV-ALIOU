@@ -1,23 +1,44 @@
-import React from 'react';
-import { X, Download, Printer, Mail, MapPin, Phone, Linkedin, Award, CheckCircle2, GraduationCap, Briefcase, Globe } from 'lucide-react';
+import React, { useRef } from 'react';
+import { X, Download, Printer, Mail, MapPin, Phone, Linkedin, Award, CheckCircle2, GraduationCap, Briefcase, Globe, Camera } from 'lucide-react';
 import { personalInfo, skillsData, experiencesData } from '../data/portfolioData';
+import { useProfilePhoto } from '../utils/photoStorage';
 
 interface CVModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenWhatsApp?: () => void;
 }
 
-export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose }) => {
+export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose, onOpenWhatsApp }) => {
+  const { photoUrl, uploadPhoto } = useProfilePhoto();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   if (!isOpen) return null;
 
   const handlePrint = () => {
     window.print();
   };
 
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      await uploadPhoto(file);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-md overflow-y-auto">
       <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl my-6 overflow-hidden">
         
+        {/* Hidden photo file input */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handlePhotoUpload}
+          accept="image/*"
+          className="hidden"
+        />
+
         {/* Top bar with actions */}
         <div className="flex items-center justify-between px-6 py-4 bg-slate-800 border-b border-slate-700">
           <div className="flex items-center gap-2 text-white font-semibold text-sm">
@@ -61,14 +82,21 @@ export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose }) => {
                   <MapPin className="w-3.5 h-3.5 text-blue-400" />
                   Dakar, Sénégal
                 </span>
-                <span className="flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-blue-400" />
-                  +221 78 333 31 75
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-blue-400" />
-                  mbowpapealiou@gmail.com
-                </span>
+                <button
+                  type="button"
+                  onClick={onOpenWhatsApp || (() => window.open('https://wa.me/221783333175', '_blank'))}
+                  className="flex items-center gap-1.5 text-emerald-400 hover:underline font-medium"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  +221 78 333 31 75 (WhatsApp)
+                </button>
+                <a
+                  href={`mailto:${personalInfo.email}`}
+                  className="flex items-center gap-1.5 text-blue-400 hover:underline"
+                >
+                  <Mail className="w-3.5 h-3.5" />
+                  {personalInfo.email}
+                </a>
                 <a
                   href={personalInfo.linkedin}
                   target="_blank"
@@ -81,12 +109,21 @@ export const CVModal: React.FC<CVModalProps> = ({ isOpen, onClose }) => {
               </div>
             </div>
 
-            <div className="relative shrink-0">
+            {/* Photo with quick-change trigger */}
+            <div className="relative shrink-0 group">
               <img
-                src="/photo.jpg"
+                src={photoUrl}
                 alt="Aliou Mbow"
                 className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover object-top border-2 border-blue-500 shadow-xl"
               />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute bottom-1 right-1 p-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white shadow-md border border-white/20 transition-all opacity-80 group-hover:opacity-100"
+                title="Changer la photo du CV"
+              >
+                <Camera className="w-3.5 h-3.5" />
+              </button>
             </div>
           </div>
 
