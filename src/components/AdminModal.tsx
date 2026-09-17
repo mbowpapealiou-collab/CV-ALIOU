@@ -112,6 +112,11 @@ export const AdminModal: React.FC<AdminModalProps> = ({
     }
     try {
       localStorage.setItem('aliou_drive_url', clean);
+      fetch('/api/media/drive-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ driveUrl: clean }),
+      }).catch(() => {});
       setDriveSuccess(true);
       setDriveError('');
       setTimeout(() => setDriveSuccess(false), 3000);
