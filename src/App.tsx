@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
@@ -31,6 +31,52 @@ export default function App() {
       return false;
     }
   });
+
+  // Secret URL listener for Aliou Mbow (#admin or /admin) and keyboard shortcut (Ctrl+Shift+A)
+  useEffect(() => {
+    const checkSecretAdmin = () => {
+      const hash = window.location.hash.toLowerCase();
+      const path = window.location.pathname.toLowerCase();
+      const search = window.location.search.toLowerCase();
+      if (
+        hash === '#admin' ||
+        hash === '#/admin' ||
+        hash.includes('admin') ||
+        search.includes('admin') ||
+        path.endsWith('/admin')
+      ) {
+        setIsAdminModalOpen(true);
+        // Clear secret trigger from the address bar to keep it confidential
+        if (window.history.replaceState) {
+          const cleanUrl = window.location.pathname + (window.location.search.replace(/[?&]admin[=1]?/gi, ''));
+          window.history.replaceState(null, '', cleanUrl || '/');
+        } else {
+          window.location.hash = '';
+        }
+      }
+    };
+
+    // Check on initial load
+    checkSecretAdmin();
+
+    // Listen to hash changes (e.g. if the user appends #admin in the URL)
+    window.addEventListener('hashchange', checkSecretAdmin);
+
+    // Discreet shortcut (Ctrl+Shift+A or Alt+A) for owner convenience
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) ||
+          (e.altKey && (e.key === 'A' || e.key === 'a'))) {
+        e.preventDefault();
+        setIsAdminModalOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('hashchange', checkSecretAdmin);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   const handleAdminLogin = () => {
     setIsAdmin(true);
@@ -63,7 +109,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-orange-500 selection:text-slate-950">
       {/* Navigation Header with hashless smooth scroll & admin indicator */}
       <Navbar
         onOpenContact={scrollToContact}

@@ -73,7 +73,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
       setLoginError('');
       setPasswordInput('');
     } else {
-      setLoginError('Mot de passe administrateur incorrect. (Défaut : ALIOU2025)');
+      setLoginError('Mot de passe administrateur incorrect.');
     }
   };
 
@@ -144,7 +144,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-slate-800 bg-slate-900/90 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-orange-500/15 border border-orange-500/30 text-orange-400 flex items-center justify-center">
               <Shield className="w-5 h-5" />
             </div>
             <div>
@@ -166,7 +166,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
             {isAdmin && (
               <button
                 onClick={onLogout}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-700 transition-colors flex items-center gap-1.5 text-xs font-semibold"
+                className="p-2 rounded-xl bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-700 transition-colors flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
                 title="Déconnexion"
               >
                 <LogOut className="w-4 h-4" />
@@ -175,7 +175,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
             )}
             <button
               onClick={onClose}
-              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -186,7 +186,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
         {!isAdmin ? (
           /* Login Form */
           <div className="p-6 sm:p-8 flex flex-col justify-center items-center text-center">
-            <div className="w-16 h-16 rounded-3xl bg-slate-800 border border-slate-700 text-blue-400 flex items-center justify-center mb-4 shadow-inner">
+            <div className="w-16 h-16 rounded-3xl bg-slate-800 border border-slate-700 text-orange-400 flex items-center justify-center mb-4 shadow-inner">
               <Lock className="w-7 h-7" />
             </div>
             <h4 className="text-xl font-bold text-white">Connexion Administrateur</h4>
@@ -208,8 +208,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       setPasswordInput(e.target.value);
                       if (loginError) setLoginError('');
                     }}
-                    placeholder="Entrez votre mot de passe (défaut: ALIOU2025)"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500"
+                    placeholder="Entrez votre mot de passe secret"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-orange-500"
                     autoFocus
                   />
                 </div>
@@ -224,7 +224,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-md transition-all"
+                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-slate-950 font-bold text-sm shadow-md transition-all cursor-pointer"
               >
                 Déverrouiller l'espace administrateur
               </button>
@@ -241,9 +241,9 @@ export const AdminModal: React.FC<AdminModalProps> = ({
             <div className="flex border-b border-slate-800 bg-slate-900/50 px-4 sm:px-6 overflow-x-auto gap-2">
               <button
                 onClick={() => setActiveTab('profile')}
-                className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors ${
+                className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors cursor-pointer ${
                   activeTab === 'profile'
-                    ? 'border-blue-500 text-blue-400'
+                    ? 'border-orange-500 text-orange-400'
                     : 'border-transparent text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -253,9 +253,9 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
               <button
                 onClick={() => setActiveTab('projects')}
-                className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors ${
+                className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors cursor-pointer ${
                   activeTab === 'projects'
-                    ? 'border-blue-500 text-blue-400'
+                    ? 'border-orange-500 text-orange-400'
                     : 'border-transparent text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -265,9 +265,9 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
               <button
                 onClick={() => setActiveTab('drive')}
-                className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors ${
+                className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors cursor-pointer ${
                   activeTab === 'drive'
-                    ? 'border-blue-500 text-blue-400'
+                    ? 'border-orange-500 text-orange-400'
                     : 'border-transparent text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -277,9 +277,9 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
               <button
                 onClick={() => setActiveTab('security')}
-                className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors ${
+                className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors cursor-pointer ${
                   activeTab === 'security'
-                    ? 'border-blue-500 text-blue-400'
+                    ? 'border-orange-500 text-orange-400'
                     : 'border-transparent text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -299,7 +299,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       <img
                         src={photoUrl}
                         alt="Aliou Mbow"
-                        className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover object-top border-2 border-blue-500 shadow-xl"
+                        className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover object-top border-2 border-orange-500 shadow-xl"
                       />
                       {isCustom && (
                         <span className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-bold text-[10px] shadow">
@@ -317,7 +317,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                         <button
                           onClick={() => profileFileRef.current?.click()}
                           disabled={isUploadingProfile}
-                          className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-2 shadow-md transition-all cursor-pointer"
+                          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-md transition-all cursor-pointer"
                         >
                           <Camera className="w-4 h-4" />
                           <span>{isUploadingProfile ? 'Compression en cours...' : 'Uploader une nouvelle photo'}</span>
@@ -378,7 +378,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 alt={project.title}
                                 className="w-full h-full object-cover"
                               />
-                              <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-slate-900/80 backdrop-blur-sm text-[10px] font-semibold text-blue-300 border border-slate-700">
+                              <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-slate-900/80 backdrop-blur-sm text-[10px] font-semibold text-orange-300 border border-slate-700">
                                 {project.category}
                               </div>
                             </div>
@@ -386,7 +386,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                           </div>
 
                           <div className="space-y-2 pt-1">
-                            <label className="w-full py-2 px-3 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-colors">
+                            <label className="w-full py-2 px-3 rounded-xl bg-orange-500/15 hover:bg-orange-500/25 border border-orange-500/40 text-orange-300 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-colors">
                               <Camera className="w-3.5 h-3.5" />
                               <span>{isUploading ? 'Traitement...' : 'Changer cette photo'}</span>
                               <input
@@ -399,7 +399,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
                             <button
                               onClick={() => resetProjectPhoto(project.id)}
-                              className="w-full py-1 text-[11px] text-slate-400 hover:text-slate-200 text-center transition-colors"
+                              className="w-full py-1 text-[11px] text-slate-400 hover:text-slate-200 text-center transition-colors cursor-pointer"
                             >
                               Rétablir l'image par défaut
                             </button>
@@ -430,7 +430,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       value={driveUrlInput}
                       onChange={(e) => setDriveUrlInput(e.target.value)}
                       placeholder="https://drive.google.com/drive/folders/..."
-                      className="w-full p-3 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                      className="w-full p-3 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-orange-500"
                     />
                     <p className="text-[11px] text-slate-400">
                       Ce lien est ouvert lorsque les recruteurs ou clients cliquent sur « Consulter sur Drive » ou « Ouvrir sur Drive ».
@@ -453,7 +453,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-md transition-all"
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
                   >
                     <Save className="w-4 h-4" />
                     <span>Enregistrer le nouveau lien Drive</span>
@@ -476,7 +476,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="Nouveau mot de passe"
-                      className="w-full p-3 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                      className="w-full p-3 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-orange-500"
                     />
                   </div>
 
@@ -489,7 +489,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-md transition-all"
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
                   >
                     <KeyRound className="w-4 h-4" />
                     <span>Mettre à jour mon mot de passe</span>
