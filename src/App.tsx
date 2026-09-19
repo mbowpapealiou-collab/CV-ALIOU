@@ -21,7 +21,17 @@ export default function App() {
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
   const [isDriveModalOpen, setIsDriveModalOpen] = useState(false);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+  const [adminInitialTab, setAdminInitialTab] = useState<'photos' | 'projects' | 'experiences' | 'profile' | 'education' | 'drive' | 'security'>('photos');
   const [driveFolderId, setDriveFolderId] = useState<string | undefined>(undefined);
+
+  const handleOpenAdmin = (tab?: 'photos' | 'projects' | 'experiences' | 'profile' | 'education' | 'drive' | 'security') => {
+    if (tab) {
+      setAdminInitialTab(tab);
+    } else {
+      setAdminInitialTab('photos');
+    }
+    setIsAdminModalOpen(true);
+  };
 
   // Admin authentication state
   const [isAdmin, setIsAdmin] = useState<boolean>(() => {
@@ -115,7 +125,7 @@ export default function App() {
         onOpenContact={scrollToContact}
         onOpenWhatsApp={() => setIsWhatsAppModalOpen(true)}
         isAdmin={isAdmin}
-        onOpenAdmin={() => setIsAdminModalOpen(true)}
+        onOpenAdmin={handleOpenAdmin}
       />
 
       {/* Main Content Sections — Fully visible to all visitors as originally intended */}
@@ -126,14 +136,14 @@ export default function App() {
           onOpenDrive={() => handleOpenDriveModal()}
           onOpenWhatsApp={() => setIsWhatsAppModalOpen(true)}
           isAdmin={isAdmin}
-          onOpenAdmin={() => setIsAdminModalOpen(true)}
+          onOpenAdmin={handleOpenAdmin}
         />
         <About />
         <Skills />
         <Projects
           onOpenDriveModal={handleOpenDriveModal}
           isAdmin={isAdmin}
-          onOpenAdmin={() => setIsAdminModalOpen(true)}
+          onOpenAdmin={handleOpenAdmin}
         />
         <ContactForm onOpenWhatsApp={() => setIsWhatsAppModalOpen(true)} />
       </main>
@@ -141,7 +151,7 @@ export default function App() {
       {/* Footer with discreet admin access */}
       <Footer
         isAdmin={isAdmin}
-        onOpenAdmin={() => setIsAdminModalOpen(true)}
+        onOpenAdmin={handleOpenAdmin}
       />
 
       {/* CV Modal Preview & Print */}
@@ -172,6 +182,7 @@ export default function App() {
         isAdmin={isAdmin}
         onLogin={handleAdminLogin}
         onLogout={handleAdminLogout}
+        initialTab={adminInitialTab}
       />
     </div>
   );

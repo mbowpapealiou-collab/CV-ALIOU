@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Send, Linkedin, MessageSquare } from 'lucide-react';
+import { Menu, X, Send, Linkedin, MessageSquare, Camera, Shield } from 'lucide-react';
 import { usePortfolioContent } from '../utils/contentStorage';
 import { useProfilePhoto } from '../utils/photoStorage';
 
 interface NavbarProps {
   onOpenContact: () => void;
   onOpenWhatsApp?: () => void;
+  isAdmin?: boolean;
+  onOpenAdmin?: (tab?: any) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ 
   onOpenContact, 
   onOpenWhatsApp,
+  isAdmin,
+  onOpenAdmin,
 }) => {
   const { personalInfo } = usePortfolioContent();
   const { photoUrl } = useProfilePhoto();
@@ -112,6 +116,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           )}
 
+          {onOpenAdmin && (
+            <button
+              onClick={() => onOpenAdmin('photos')}
+              className="px-3 py-2 text-orange-400 hover:text-orange-300 bg-orange-500/15 hover:bg-orange-500/25 rounded-lg transition-colors flex items-center gap-1.5 text-xs lg:text-sm font-bold border border-orange-500/40 cursor-pointer shadow-sm"
+              title="Espace Administrateur : Uploader photos, insérer liens et modifier textes"
+            >
+              <Camera className="w-4 h-4 text-orange-400" />
+              <span>📸 Photos & Liens (Admin)</span>
+            </button>
+          )}
+
           <a
             href={personalInfo.linkedin}
             target="_blank"
@@ -168,6 +183,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             ))}
           </div>
           <div className="pt-3 border-t border-slate-800 flex flex-col gap-2">
+            {onOpenAdmin && (
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAdmin('photos');
+                }}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold text-orange-400 bg-orange-500/15 border border-orange-500/30 rounded-lg cursor-pointer"
+              >
+                <Camera className="w-4 h-4" />
+                <span>Espace Admin (Uploader Photos & Liens)</span>
+              </button>
+            )}
             {onOpenWhatsApp && (
               <button
                 onClick={() => {

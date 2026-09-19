@@ -16,6 +16,7 @@ interface AdminModalProps {
   isAdmin: boolean;
   onLogin: () => void;
   onLogout: () => void;
+  initialTab?: 'photos' | 'projects' | 'experiences' | 'profile' | 'education' | 'drive' | 'security';
 }
 
 export const AdminModal: React.FC<AdminModalProps> = ({
@@ -24,8 +25,9 @@ export const AdminModal: React.FC<AdminModalProps> = ({
   isAdmin,
   onLogin,
   onLogout,
+  initialTab = 'photos',
 }) => {
-  const [activeTab, setActiveTab] = useState<'experiences' | 'profile' | 'projects' | 'education' | 'photos' | 'drive' | 'security'>('experiences');
+  const [activeTab, setActiveTab] = useState<'photos' | 'projects' | 'experiences' | 'profile' | 'education' | 'drive' | 'security'>(initialTab);
   const [passwordInput, setPasswordInput] = useState('');
   const [loginError, setLoginError] = useState('');
   
@@ -62,11 +64,14 @@ export const AdminModal: React.FC<AdminModalProps> = ({
   // Sync draft states when modal opens or when external content updates
   useEffect(() => {
     if (isOpen) {
+      if (initialTab) {
+        setActiveTab(initialTab);
+      }
       setDraftExperiences(JSON.parse(JSON.stringify(experiences)));
       setDraftPersonalInfo(JSON.parse(JSON.stringify(personalInfo)));
       setDraftProjects(JSON.parse(JSON.stringify(projects)));
     }
-  }, [isOpen, experiences, personalInfo, projects]);
+  }, [isOpen, initialTab, experiences, personalInfo, projects]);
 
   // Photos & Projects hooks
   const { photoUrl, isCustom, uploadPhoto, resetPhoto } = useProfilePhoto();
@@ -441,6 +446,30 @@ export const AdminModal: React.FC<AdminModalProps> = ({
             {/* Navigation Tabs */}
             <div className="flex border-b border-slate-800 bg-slate-900/60 px-4 sm:px-6 overflow-x-auto gap-1 sm:gap-2">
               <button
+                onClick={() => setActiveTab('photos')}
+                className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors cursor-pointer ${
+                  activeTab === 'photos'
+                    ? 'border-orange-500 text-orange-400 bg-orange-500/10'
+                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Camera className="w-4 h-4 text-orange-400" />
+                <span>1. Photos (Profil & Projets)</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('projects')}
+                className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors cursor-pointer ${
+                  activeTab === 'projects'
+                    ? 'border-orange-500 text-orange-400 bg-orange-500/10'
+                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <ImageIcon className="w-4 h-4" />
+                <span>2. Projets & Insérer Liens</span>
+              </button>
+
+              <button
                 onClick={() => setActiveTab('experiences')}
                 className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors cursor-pointer ${
                   activeTab === 'experiences'
@@ -449,7 +478,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 }`}
               >
                 <Briefcase className="w-4 h-4" />
-                <span>Expériences & Dates</span>
+                <span>3. Expériences & Statut</span>
               </button>
 
               <button
@@ -461,19 +490,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 }`}
               >
                 <User className="w-4 h-4" />
-                <span>Textes & Profil</span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab('projects')}
-                className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors cursor-pointer ${
-                  activeTab === 'projects'
-                    ? 'border-orange-500 text-orange-400'
-                    : 'border-transparent text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                <ImageIcon className="w-4 h-4" />
-                <span>Projets & Liens</span>
+                <span>4. Textes & Profil</span>
               </button>
 
               <button
@@ -485,19 +502,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 }`}
               >
                 <GraduationCap className="w-4 h-4" />
-                <span>Formations</span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab('photos')}
-                className={`py-3 px-3 text-xs sm:text-sm font-semibold border-b-2 flex items-center gap-2 whitespace-nowrap transition-colors cursor-pointer ${
-                  activeTab === 'photos'
-                    ? 'border-orange-500 text-orange-400'
-                    : 'border-transparent text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                <Camera className="w-4 h-4" />
-                <span>Photo de Profil</span>
+                <span>5. Formations</span>
               </button>
 
               <button
@@ -509,7 +514,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 }`}
               >
                 <HardDrive className="w-4 h-4" />
-                <span>Dossier Drive</span>
+                <span>6. Dossier Drive</span>
               </button>
 
               <button
@@ -521,7 +526,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 }`}
               >
                 <KeyRound className="w-4 h-4" />
-                <span>Sécurité</span>
+                <span>7. Mot de passe</span>
               </button>
             </div>
 
@@ -858,17 +863,36 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 </div>
               )}
 
-              {/* TAB 3: PROJECTS & LINKS */}
+              {/* TAB 2: PROJECTS & LINKS */}
               {activeTab === 'projects' && (
                 <div className="space-y-6">
+                  {/* Top Guide Banner */}
+                  <div className="p-4 rounded-2xl bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-transparent border border-orange-500/30">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 rounded-xl bg-orange-500/20 text-orange-400 shrink-0 mt-0.5">
+                        <ImageIcon className="w-5 h-5" />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="text-sm font-bold text-white">
+                          Espace Projets : Insérez vos liens et changez les photos
+                        </h4>
+                        <p className="text-xs text-slate-300 leading-relaxed">
+                          • <strong>Lien Google Drive</strong> : Collez l'URL de votre dossier ou document Drive. Un bouton &laquo; Drive &raquo; s'affiche sur la carte du projet.<br />
+                          • <strong>Lien Web / Démo</strong> : Collez l'URL d'un site en ligne. Un bouton &laquo; Lien Web &raquo; apparaîtra automatiquement pour vos visiteurs.<br />
+                          • <strong>Photo du projet</strong> : Cliquez sur &laquo; Changer la photo &raquo; pour charger une image depuis votre appareil.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
                     <div>
                       <h4 className="text-lg font-bold text-white flex items-center gap-2">
                         <ImageIcon className="w-5 h-5 text-orange-400" />
-                        <span>Projets, Liens Web & Photos</span>
+                        <span>Gestion des Projets & Liens</span>
                       </h4>
                       <p className="text-xs text-slate-400 mt-0.5">
-                        Ajoutez ou modifiez des projets, insérez vos liens Google Drive et liens Web, et téléchargez des photos.
+                        {draftProjects.length} projet(s) configuré(s). N'oubliez pas de cliquer sur &laquo; Enregistrer les projets &raquo; après modification.
                       </p>
                     </div>
 
@@ -894,7 +918,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                   {projectsSuccess && (
                     <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-medium flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                      <span>Tous les projets et liens ont été synchronisés sur le serveur avec succès !</span>
+                      <span>Tous les projets, photos et liens ont été synchronisés sur le serveur avec succès !</span>
                     </div>
                   )}
 
@@ -904,8 +928,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       return (
                         <div key={proj.id} className="p-4 sm:p-5 rounded-2xl bg-slate-800/60 border border-slate-700 space-y-4">
                           <div className="flex items-center justify-between border-b border-slate-700 pb-3">
-                            <span className="text-xs font-bold text-slate-400">
-                              Projet #{idx + 1} ({proj.id})
+                            <span className="text-xs font-bold text-orange-400">
+                              Projet #{idx + 1} : {proj.title}
                             </span>
                             <button
                               onClick={() => handleDeleteProject(idx)}
@@ -934,8 +958,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                   </div>
                                 )}
                               </div>
-                              <label className="block w-full py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-orange-400 text-center text-xs font-semibold border border-slate-700 cursor-pointer transition-colors">
-                                Changer la photo
+                              <label className="block w-full py-2 px-3 rounded-lg bg-orange-500/15 hover:bg-orange-500/25 text-orange-400 text-center text-xs font-bold border border-orange-500/30 cursor-pointer transition-colors">
+                                📷 Changer la photo
                                 <input
                                   type="file"
                                   accept="image/jpeg,image/png,image/webp"
@@ -1004,30 +1028,56 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                               {/* LIENS */}
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                                 <div>
-                                  <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
-                                    <HardDrive className="w-3.5 h-3.5 text-orange-400" />
-                                    <span>Lien Google Drive du projet</span>
-                                  </label>
+                                  <div className="flex items-center justify-between mb-1">
+                                    <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                                      <HardDrive className="w-3.5 h-3.5 text-orange-400" />
+                                      <span>Lien Google Drive du projet</span>
+                                    </label>
+                                    {proj.driveUrl && (
+                                      <a
+                                        href={proj.driveUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-[11px] text-orange-400 hover:underline flex items-center gap-1"
+                                      >
+                                        <span>Tester</span>
+                                        <ExternalLink className="w-3 h-3" />
+                                      </a>
+                                    )}
+                                  </div>
                                   <input
                                     type="text"
                                     value={proj.driveUrl || ''}
                                     onChange={(e) => handleProjectChange(idx, 'driveUrl', e.target.value)}
                                     placeholder="https://drive.google.com/..."
-                                    className="w-full px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-xs focus:outline-none focus:border-orange-500"
+                                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-xs focus:outline-none focus:border-orange-500"
                                   />
                                 </div>
 
                                 <div>
-                                  <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
-                                    <Globe className="w-3.5 h-3.5 text-amber-400" />
-                                    <span>Lien Web / Démo en direct</span>
-                                  </label>
+                                  <div className="flex items-center justify-between mb-1">
+                                    <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                                      <Globe className="w-3.5 h-3.5 text-amber-400" />
+                                      <span>Lien Web / Démo en direct</span>
+                                    </label>
+                                    {proj.projectUrl && (
+                                      <a
+                                        href={proj.projectUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-[11px] text-amber-400 hover:underline flex items-center gap-1"
+                                      >
+                                        <span>Tester</span>
+                                        <ExternalLink className="w-3 h-3" />
+                                      </a>
+                                    )}
+                                  </div>
                                   <input
                                     type="text"
                                     value={proj.projectUrl || ''}
                                     onChange={(e) => handleProjectChange(idx, 'projectUrl', e.target.value)}
                                     placeholder="https://mon-projet-en-ligne.com"
-                                    className="w-full px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-xs focus:outline-none focus:border-orange-500"
+                                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-xs focus:outline-none focus:border-orange-500"
                                   />
                                 </div>
                               </div>
@@ -1036,6 +1086,17 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                         </div>
                       );
                     })}
+                  </div>
+
+                  {/* Bottom Save bar */}
+                  <div className="pt-4 border-t border-slate-800 flex justify-end">
+                    <button
+                      onClick={handleSaveProjects}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-slate-950 text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer"
+                    >
+                      <Save className="w-4 h-4" />
+                      <span>Enregistrer tous les projets et liens</span>
+                    </button>
                   </div>
                 </div>
               )}
@@ -1142,71 +1203,165 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 </div>
               )}
 
-              {/* TAB 5: PROFILE PHOTO */}
+              {/* TAB 1: PHOTOS (PROFILE & PROJECTS) */}
               {activeTab === 'photos' && (
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="text-lg font-bold text-white flex items-center gap-2">
-                      <Camera className="w-5 h-5 text-orange-400" />
-                      <span>Photo de Profil Principale</span>
-                    </h4>
-                    <p className="text-xs text-slate-400 mt-0.5">
-                      Cette photo est affichée dans l'en-tête, la barre de navigation et le pied de page.
-                    </p>
+                <div className="space-y-8">
+                  {/* Top Guide Banner */}
+                  <div className="p-4 rounded-2xl bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-transparent border border-orange-500/30">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 rounded-xl bg-orange-500/20 text-orange-400 shrink-0 mt-0.5">
+                        <Camera className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-white">
+                          Espace Photos : Téléversez vos images sur le serveur
+                        </h4>
+                        <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                          Toute photo envoyée ici est immédiatement enregistrée sur le serveur et visible par tous les visiteurs de votre lien portfolio.
+                        </p>
+                      </div>
+                    </div>
                   </div>
 
-                  {photoUploadSuccess && (
-                    <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-medium flex items-center gap-2">
-                      <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                      <span>Votre photo a été enregistrée sur le serveur et est visible par tous vos contacts !</span>
-                    </div>
-                  )}
-
-                  <div className="p-6 rounded-3xl bg-slate-800/40 border border-slate-700/80 flex flex-col sm:flex-row items-center gap-6">
-                    <div className="relative group">
-                      <img
-                        src={photoUrl}
-                        alt="Aperçu photo"
-                        className="w-32 h-32 rounded-full object-cover object-top border-4 border-orange-500/60 shadow-xl"
-                      />
-                      {isUploadingProfile && (
-                        <div className="absolute inset-0 rounded-full bg-slate-950/70 flex items-center justify-center text-xs text-orange-400 font-bold">
-                          Envoi...
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="space-y-3 flex-1 text-center sm:text-left">
-                      <h5 className="font-semibold text-white text-sm">
-                        Sélectionnez une nouvelle photo de profil
+                  {/* Section A: Photo de Profil */}
+                  <div className="space-y-4">
+                    <div className="border-b border-slate-800 pb-2">
+                      <h5 className="text-base font-bold text-white flex items-center gap-2">
+                        <User className="w-4 h-4 text-orange-400" />
+                        <span>A. Photo de Profil Principale (Aliou Mbow)</span>
                       </h5>
                       <p className="text-xs text-slate-400">
-                        Formats acceptés : JPG, PNG, WebP. L'image sera automatiquement optimisée pour un affichage rapide et net.
+                        Cette photo apparaît dans l'en-tête, la barre de navigation et le pied de page du site.
                       </p>
+                    </div>
 
-                      <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 pt-2">
-                        <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-slate-950 text-xs font-bold shadow-md transition-all cursor-pointer">
-                          <Camera className="w-4 h-4" />
-                          <span>Uploader une photo</span>
-                          <input
-                            ref={profileFileRef}
-                            type="file"
-                            accept="image/jpeg,image/png,image/webp"
-                            onChange={handleProfileFileChange}
-                            className="hidden"
-                          />
-                        </label>
+                    {photoUploadSuccess && (
+                      <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-medium flex items-center gap-2">
+                        <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>Votre photo a été enregistrée sur le serveur et est visible par tous vos contacts et recruteurs !</span>
+                      </div>
+                    )}
 
-                        {isCustom && (
-                          <button
-                            onClick={resetPhoto}
-                            className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium border border-slate-700 transition-colors cursor-pointer"
-                          >
-                            <RotateCcw className="w-3.5 h-3.5" />
-                            <span>Rétablir la photo par défaut</span>
-                          </button>
+                    <div className="p-5 sm:p-6 rounded-3xl bg-slate-800/40 border border-slate-700/80 flex flex-col sm:flex-row items-center gap-6">
+                      <div className="relative group shrink-0">
+                        <img
+                          src={photoUrl}
+                          alt="Photo de profil"
+                          className="w-32 h-32 rounded-full object-cover object-top border-4 border-orange-500/80 shadow-2xl ring-4 ring-orange-500/20"
+                        />
+                        {isUploadingProfile && (
+                          <div className="absolute inset-0 rounded-full bg-slate-950/80 flex flex-col items-center justify-center text-xs text-orange-400 font-bold">
+                            <Clock className="w-5 h-5 animate-spin mb-1 text-orange-400" />
+                            <span>Envoi...</span>
+                          </div>
                         )}
                       </div>
+
+                      <div className="space-y-3 flex-1 text-center sm:text-left">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-semibold">
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>Photo actuelle synchronisée sur le serveur</span>
+                        </div>
+                        <h6 className="font-semibold text-white text-sm">
+                          Sélectionnez une nouvelle photo de profil
+                        </h6>
+                        <p className="text-xs text-slate-400 max-w-lg leading-relaxed">
+                          Formats acceptés : JPG, PNG, WebP. L'image sera automatiquement recadrée et optimisée en haute résolution.
+                        </p>
+
+                        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 pt-2">
+                          <label className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-slate-950 text-xs sm:text-sm font-bold shadow-lg shadow-orange-500/25 transition-all cursor-pointer hover:scale-[1.02] active:scale-95">
+                            <Camera className="w-4 h-4" />
+                            <span>Choisir une photo sur mon appareil</span>
+                            <input
+                              ref={profileFileRef}
+                              type="file"
+                              accept="image/jpeg,image/png,image/webp"
+                              onChange={handleProfileFileChange}
+                              className="hidden"
+                            />
+                          </label>
+
+                          {isCustom && (
+                            <button
+                              onClick={resetPhoto}
+                              className="inline-flex items-center gap-1.5 px-3 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium border border-slate-700 transition-colors cursor-pointer"
+                            >
+                              <RotateCcw className="w-3.5 h-3.5" />
+                              <span>Rétablir photo originale</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section B: Photos des Projets */}
+                  <div className="space-y-4 pt-4 border-t border-slate-800">
+                    <div>
+                      <h5 className="text-base font-bold text-white flex items-center gap-2">
+                        <ImageIcon className="w-4 h-4 text-orange-400" />
+                        <span>B. Photos de vos Projets (Intellia, Access, Marketing Digital...)</span>
+                      </h5>
+                      <p className="text-xs text-slate-400">
+                        Chaque projet peut avoir sa propre photo spécifique affichée sur la carte du projet.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {draftProjects.map((proj) => {
+                        const currentPhoto = getPhoto(proj.id, proj.image);
+                        const isUploadingThis = uploadingProjectId === proj.id;
+                        const isSuccessThis = projectSuccessId === proj.id;
+
+                        return (
+                          <div
+                            key={proj.id}
+                            className="p-4 rounded-2xl bg-slate-800/50 border border-slate-700/80 flex flex-col justify-between space-y-3"
+                          >
+                            <div className="space-y-2">
+                              <div className="relative rounded-xl overflow-hidden aspect-video bg-slate-900 border border-slate-700">
+                                <img
+                                  src={currentPhoto}
+                                  alt={proj.title}
+                                  className="w-full h-full object-cover"
+                                />
+                                {isUploadingThis && (
+                                  <div className="absolute inset-0 bg-slate-950/80 flex flex-col items-center justify-center text-xs text-orange-400 font-bold">
+                                    <Clock className="w-5 h-5 animate-spin mb-1 text-orange-400" />
+                                    <span>Envoi...</span>
+                                  </div>
+                                )}
+                                {isSuccessThis && (
+                                  <div className="absolute inset-0 bg-emerald-950/80 flex items-center justify-center text-xs text-emerald-300 font-bold">
+                                    <Check className="w-5 h-5 mr-1 text-emerald-400" />
+                                    <span>Photo mise à jour !</span>
+                                  </div>
+                                )}
+                              </div>
+
+                              <div>
+                                <h6 className="font-bold text-white text-xs sm:text-sm line-clamp-1">
+                                  {proj.title}
+                                </h6>
+                                <span className="text-[11px] text-amber-400 font-medium">
+                                  {proj.category}
+                                </span>
+                              </div>
+                            </div>
+
+                            <label className="block w-full py-2 px-3 rounded-xl bg-orange-500/15 hover:bg-orange-500/25 text-orange-400 text-center text-xs font-bold border border-orange-500/30 cursor-pointer transition-colors shadow-sm">
+                              <span>📷 Changer la photo</span>
+                              <input
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                onChange={(e) => handleProjectFileChange(proj.id, e)}
+                                className="hidden"
+                              />
+                            </label>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
