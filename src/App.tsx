@@ -72,19 +72,22 @@ export default function App() {
     // Listen to hash changes (e.g. if the user appends #admin in the URL)
     window.addEventListener('hashchange', checkSecretAdmin);
 
-    // Discreet shortcut (Ctrl+Shift+A or Alt+A) for owner convenience
+    // Discreet shortcut (Ctrl+Shift+A or Cmd+Shift+A or Alt+A) for owner convenience
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) ||
-          (e.altKey && (e.key === 'A' || e.key === 'a'))) {
+      const isKeyA = e.key === 'A' || e.key === 'a' || e.code === 'KeyA';
+      const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+
+      if ((isCtrlOrCmd && e.shiftKey && isKeyA) || (e.altKey && isKeyA)) {
         e.preventDefault();
+        e.stopPropagation();
         setIsAdminModalOpen((prev) => !prev);
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown, true);
 
     return () => {
       window.removeEventListener('hashchange', checkSecretAdmin);
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown, true);
     };
   }, []);
 

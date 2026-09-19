@@ -26,19 +26,12 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin, onOpenAdmin }) => {
           
           {/* Logo & Name with synchronized photo */}
           <div className="flex items-center gap-3">
-            <div className="relative group cursor-pointer" onClick={() => onOpenAdmin?.('photos')}>
-              <img
-                src={photoUrl}
-                alt="Aliou Mbow"
-                className="w-10 h-10 rounded-full object-cover object-top border-2 border-orange-500/60 shadow-sm"
-                referrerPolicy="no-referrer"
-              />
-              {onOpenAdmin && (
-                <div className="absolute inset-0 bg-slate-950/60 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                  <Camera className="w-3.5 h-3.5 text-orange-400" />
-                </div>
-              )}
-            </div>
+            <img
+              src={photoUrl}
+              alt="Aliou Mbow"
+              className="w-10 h-10 rounded-full object-cover object-top border-2 border-orange-500/60 shadow-sm"
+              referrerPolicy="no-referrer"
+            />
             <div>
               <span className="text-white font-semibold block text-sm">
                 {personalInfo.name}
@@ -49,20 +42,9 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin, onOpenAdmin }) => {
             </div>
           </div>
 
-          {/* Copyright & Discreet Admin Access */}
-          <div className="text-xs text-slate-500 text-center space-y-1">
-            <div>© {new Date().getFullYear()} {personalInfo.name}. Management Informatisé des Organisations.</div>
-            {onOpenAdmin && (
-              <div>
-                <button
-                  onClick={() => onOpenAdmin('photos')}
-                  className="inline-flex items-center gap-1.5 text-slate-500 hover:text-orange-400 transition-colors cursor-pointer py-1 px-2 rounded-md hover:bg-slate-900"
-                >
-                  <Shield className="w-3.5 h-3.5 text-orange-400/70" />
-                  <span>Espace Administrateur : Uploader Photos & Liens</span>
-                </button>
-              </div>
-            )}
+          {/* Copyright */}
+          <div className="text-xs text-slate-500 text-center">
+            <span>© {new Date().getFullYear()} {personalInfo.name}. Management Informatisé des Organisations.</span>
           </div>
 
           {/* Socials & Back to top */}

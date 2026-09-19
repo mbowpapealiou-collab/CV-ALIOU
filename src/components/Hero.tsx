@@ -120,26 +120,10 @@ export const Hero: React.FC<HeroProps> = ({
                     className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
                   />
                   
-                  {/* Top badges */}
-                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-                    {onOpenAdmin && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onOpenAdmin('photos');
-                        }}
-                        className="pointer-events-auto px-3 py-1.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-orange-500/30 transition-all cursor-pointer hover:scale-105 active:scale-95"
-                        title="Uploader ou changer la photo de profil"
-                      >
-                        <Camera className="w-3.5 h-3.5" />
-                        <span>📸 Changer la photo</span>
-                      </button>
-                    )}
-                    <div className="ml-auto px-3 py-1 rounded-full bg-slate-900/85 backdrop-blur-md border border-orange-500/40 text-amber-400 text-xs font-semibold flex items-center gap-1.5 shadow-sm">
-                      <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
-                      Profil Certifié
-                    </div>
+                  {/* Top badge */}
+                  <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-slate-900/85 backdrop-blur-md border border-orange-500/40 text-amber-400 text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+                    Profil Certifié
                   </div>
 
                   {/* Name overlay */}

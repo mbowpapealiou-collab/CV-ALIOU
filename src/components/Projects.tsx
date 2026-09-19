@@ -133,24 +133,15 @@ export const Projects: React.FC<ProjectsProps> = ({
                   <ExternalLink className="w-3.5 h-3.5 shrink-0" />
                 </a>
 
-                {onOpenAdmin && (
+                {isAdmin && (
                   <button
-                    onClick={() => onOpenAdmin('projects')}
-                    className="inline-flex items-center justify-center gap-1.5 px-3.5 py-3 rounded-xl bg-orange-500/15 hover:bg-orange-500/25 text-orange-400 hover:text-orange-300 border border-orange-500/30 transition-colors text-xs font-semibold min-h-[44px] cursor-pointer"
-                    title="Gérer les projets, uploader les photos et insérer les liens"
+                    onClick={() => setIsEditingDrive(!isEditingDrive)}
+                    className="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-orange-400 border border-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+                    title="Personnaliser le lien Google Drive"
                   >
-                    <FolderGit2 className="w-4 h-4 text-orange-400" />
-                    <span>Gérer Liens & Photos</span>
+                    <Edit3 className="w-4 h-4" />
                   </button>
                 )}
-
-                <button
-                  onClick={() => setIsEditingDrive(!isEditingDrive)}
-                  className="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-orange-400 border border-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
-                  title="Personnaliser le lien Google Drive"
-                >
-                  <Edit3 className="w-4 h-4" />
-                </button>
               </div>
             </div>
           </div>
@@ -223,49 +214,36 @@ export const Projects: React.FC<ProjectsProps> = ({
                   </span>
                 </div>
 
-                {/* Admin Quick Upload Button on Card */}
-                <div
-                  className="absolute bottom-3 right-3 z-10"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {isAdmin ? (
-                    <>
-                      <button
-                        onClick={() => fileInputRefs.current[project.id]?.click()}
-                        className="px-3 py-1.5 rounded-xl bg-slate-950/90 hover:bg-orange-500 text-white hover:text-slate-950 border border-slate-700/80 text-xs font-medium flex items-center gap-1.5 shadow-xl backdrop-blur-md transition-all cursor-pointer"
-                        title="Changer la photo de ce projet"
-                      >
-                        <Camera className="w-3.5 h-3.5 text-orange-400 hover:text-slate-950" />
-                        <span>{uploadingProjId === project.id ? 'Chargement...' : 'Modifier photo'}</span>
-                      </button>
-                      <input
-                        ref={(el) => (fileInputRefs.current[project.id] = el)}
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={async (e) => {
-                          const file = e.target.files?.[0];
-                          if (!file) return;
-                          setUploadingProjId(project.id);
-                          await uploadProjectPhoto(project.id, file);
-                          setUploadingProjId(null);
-                          e.target.value = '';
-                        }}
-                      />
-                    </>
-                  ) : (
-                    onOpenAdmin && (
-                      <button
-                        onClick={() => onOpenAdmin('projects')}
-                        className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-orange-500 text-orange-400 hover:text-slate-950 border border-orange-500/40 text-xs font-semibold flex items-center gap-1.5 shadow-lg backdrop-blur-md transition-all cursor-pointer"
-                        title="Gérer la photo et les liens de ce projet"
-                      >
-                        <Camera className="w-3.5 h-3.5" />
-                        <span>📸 Photo & Liens</span>
-                      </button>
-                    )
-                  )}
-                </div>
+                {/* Admin Quick Upload Button on Card (strictly hidden for visitors, only shown if logged in as admin) */}
+                {isAdmin && (
+                  <div
+                    className="absolute bottom-3 right-3 z-10"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <button
+                      onClick={() => fileInputRefs.current[project.id]?.click()}
+                      className="px-3 py-1.5 rounded-xl bg-slate-950/90 hover:bg-orange-500 text-white hover:text-slate-950 border border-slate-700/80 text-xs font-medium flex items-center gap-1.5 shadow-xl backdrop-blur-md transition-all cursor-pointer"
+                      title="Changer la photo de ce projet"
+                    >
+                      <Camera className="w-3.5 h-3.5 text-orange-400 hover:text-slate-950" />
+                      <span>{uploadingProjId === project.id ? 'Chargement...' : 'Modifier photo'}</span>
+                    </button>
+                    <input
+                      ref={(el) => (fileInputRefs.current[project.id] = el)}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        setUploadingProjId(project.id);
+                        await uploadProjectPhoto(project.id, file);
+                        setUploadingProjId(null);
+                        e.target.value = '';
+                      }}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Content Body */}
