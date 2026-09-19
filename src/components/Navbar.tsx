@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Send, Linkedin, MessageSquare } from 'lucide-react';
-import { personalInfo } from '../data/portfolioData';
+import { usePortfolioContent } from '../utils/contentStorage';
 import { useProfilePhoto } from '../utils/photoStorage';
 
 interface NavbarProps {
@@ -12,6 +12,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenContact, 
   onOpenWhatsApp,
 }) => {
+  const { personalInfo } = usePortfolioContent();
   const { photoUrl } = useProfilePhoto();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

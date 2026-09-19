@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle2, AlertCircle, Loader2, Linkedin, MessageSquare, Clock, ExternalLink, MailQuestion, ShieldCheck } from 'lucide-react';
-import { personalInfo } from '../data/portfolioData';
+import { usePortfolioContent } from '../utils/contentStorage';
 import { sanitizeInput, validateEmail, checkSubmissionRateLimit, recordSubmission } from '../utils/security';
 
 interface ContactFormProps {
@@ -8,6 +8,7 @@ interface ContactFormProps {
 }
 
 export const ContactForm: React.FC<ContactFormProps> = ({ onOpenWhatsApp }) => {
+  const { personalInfo } = usePortfolioContent();
   const [formData, setFormData] = useState({
     name: '',
     email: '',

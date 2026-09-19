@@ -1,8 +1,10 @@
 import React from 'react';
-import { User, CheckCircle2, Award, Briefcase, Users, TrendingUp, GraduationCap } from 'lucide-react';
-import { personalInfo, experiencesData } from '../data/portfolioData';
+import { User, CheckCircle2, Award, Briefcase, Users, TrendingUp, GraduationCap, Check, Clock } from 'lucide-react';
+import { usePortfolioContent } from '../utils/contentStorage';
 
 export const About: React.FC = () => {
+  const { personalInfo, experiences } = usePortfolioContent();
+
   const highlights = [
     {
       title: "Management & Organisation",
@@ -37,10 +39,10 @@ export const About: React.FC = () => {
             PROFIL & PARCOURS
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
-            Management Informatisé des Organisations & Stratégie Digitale
+            {personalInfo.role} & Stratégie Digitale
           </h2>
           <p className="mt-4 text-base text-slate-400 leading-relaxed">
-            Étudiant en 3ème année de Management Informatisé des Organisations (MIO) à l'Université Iba Der Thiam de Thiès. À la croisée de la gestion d'entreprise, des systèmes d'information et de la communication digitale, j'allie méthodologie, dynamisme commercial et esprit d'initiative.
+            {personalInfo.bio}
           </p>
         </div>
 
@@ -73,7 +75,7 @@ export const About: React.FC = () => {
               <h3 className="text-xl font-bold text-white">Formation Académique</h3>
             </div>
             <div className="space-y-4">
-              {personalInfo.education.map((edu, idx) => (
+              {personalInfo.education && personalInfo.education.map((edu, idx) => (
                 <div key={idx} className="pb-3 border-b border-slate-700/40 last:border-0 last:pb-0">
                   <div className="flex items-center justify-between">
                     <h4 className="font-semibold text-white text-base">{edu.degree}</h4>
@@ -115,36 +117,56 @@ export const About: React.FC = () => {
           </div>
 
           <div className="max-w-3xl mx-auto space-y-8 relative before:absolute before:inset-0 before:left-3.5 sm:before:left-1/2 before:-translate-x-1/2 before:w-0.5 before:bg-slate-800">
-            {experiencesData.map((exp, idx) => (
-              <div
-                key={idx}
-                className="relative flex flex-col sm:flex-row items-start gap-6 group"
-              >
-                {/* Center dot */}
-                <div className="absolute left-3.5 sm:left-1/2 -translate-x-1/2 top-1.5 w-4 h-4 rounded-full bg-orange-500 ring-4 ring-slate-900 ring-offset-2 ring-offset-orange-500/20 group-hover:scale-125 transition-transform" />
+            {experiences.map((exp, idx) => {
+              const isTermine = exp.isCompleted || (!exp.period.toLowerCase().includes('présent') && !exp.period.toLowerCase().includes('en cours'));
+              return (
+                <div
+                  key={idx}
+                  className="relative flex flex-col sm:flex-row items-start gap-6 group"
+                >
+                  {/* Center dot */}
+                  <div className={`absolute left-3.5 sm:left-1/2 -translate-x-1/2 top-1.5 w-4 h-4 rounded-full ring-4 ring-slate-900 ring-offset-2 transition-transform ${
+                    isTermine
+                      ? 'bg-slate-500 ring-offset-slate-600/30'
+                      : 'bg-orange-500 ring-offset-orange-500/20 group-hover:scale-125'
+                  }`} />
 
-                {/* Left side on desktop: Date/Period */}
-                <div className="sm:w-1/2 sm:text-right pl-10 sm:pl-0 sm:pr-10">
-                  <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/25">
-                    {exp.period}
-                  </span>
-                  <h4 className="text-lg font-bold text-white mt-1">{exp.role}</h4>
-                  <p className="text-sm text-slate-400 font-medium">{exp.company}</p>
-                </div>
+                  {/* Left side on desktop: Date/Period & Status */}
+                  <div className="sm:w-1/2 sm:text-right pl-10 sm:pl-0 sm:pr-10">
+                    <div className="flex items-center sm:justify-end gap-2 flex-wrap mb-1">
+                      <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/25">
+                        {exp.period}
+                      </span>
+                      {isTermine ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+                          <Check className="w-3 h-3 text-emerald-400" />
+                          Terminé
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 animate-pulse">
+                          <Clock className="w-3 h-3" />
+                          En cours
+                        </span>
+                      )}
+                    </div>
+                    <h4 className="text-lg font-bold text-white mt-1">{exp.role}</h4>
+                    <p className="text-sm text-slate-400 font-medium">{exp.company}</p>
+                  </div>
 
-                {/* Right side on desktop: Details */}
-                <div className="sm:w-1/2 pl-10 sm:pl-10">
-                  <ul className="space-y-2 text-sm text-slate-400">
-                    {exp.description.map((bullet, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Right side on desktop: Details */}
+                  <div className="sm:w-1/2 pl-10 sm:pl-10">
+                    <ul className="space-y-2 text-sm text-slate-400">
+                      {exp.description.map((bullet, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -152,4 +174,3 @@ export const About: React.FC = () => {
     </section>
   );
 };
-

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Cpu, Briefcase, Megaphone, Database, Sparkles } from 'lucide-react';
-import { skillsData } from '../data/portfolioData';
+import { usePortfolioContent } from '../utils/contentStorage';
 
 export const Skills: React.FC = () => {
+  const { skills } = usePortfolioContent();
   const getIcon = (name: string) => {
     switch (name) {
       case 'Briefcase':
@@ -37,7 +38,7 @@ export const Skills: React.FC = () => {
 
         {/* Skills Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {skillsData.map((cat) => (
+          {skills.map((cat) => (
             <div
               key={cat.title}
               className="p-6 sm:p-8 rounded-3xl bg-slate-900/60 border border-slate-800 backdrop-blur-sm shadow-xl hover:border-orange-500/30 transition-colors"

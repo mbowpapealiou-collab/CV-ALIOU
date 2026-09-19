@@ -1,6 +1,6 @@
 import React from 'react';
 import { Download, CheckCircle, MapPin, Briefcase, HardDrive, MessageSquare } from 'lucide-react';
-import { personalInfo } from '../data/portfolioData';
+import { usePortfolioContent } from '../utils/contentStorage';
 import { useProfilePhoto } from '../utils/photoStorage';
 
 interface HeroProps {
@@ -16,6 +16,7 @@ export const Hero: React.FC<HeroProps> = ({
   onOpenDrive,
   onOpenWhatsApp,
 }) => {
+  const { personalInfo } = usePortfolioContent();
   const { photoUrl } = useProfilePhoto();
 
   return (

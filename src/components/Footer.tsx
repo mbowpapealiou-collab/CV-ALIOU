@@ -1,9 +1,10 @@
 import React from 'react';
 import { ArrowUp, Linkedin, Mail, HardDrive, Phone } from 'lucide-react';
-import { personalInfo } from '../data/portfolioData';
+import { usePortfolioContent } from '../utils/contentStorage';
 import { useProfilePhoto } from '../utils/photoStorage';
 
 export const Footer: React.FC = () => {
+  const { personalInfo } = usePortfolioContent();
   const { photoUrl } = useProfilePhoto();
 
   const scrollToTop = () => {

@@ -21,6 +21,10 @@ interface SiteData {
   profilePhotoTimestamp?: number;
   projectPhotos: Record<string, string>;
   driveUrl: string | null;
+  personalInfo?: any;
+  experiences?: any[];
+  projects?: any[];
+  skills?: any[];
 }
 
 function loadSiteData(): SiteData {
@@ -218,6 +222,67 @@ async function startServer() {
       saveSiteData(siteData);
     }
     return res.json({ success: true });
+  });
+
+  // --- Dynamic Content API Routes ---
+  app.get('/api/content', (req, res) => {
+    const data = loadSiteData();
+    res.json({
+      personalInfo: data.personalInfo || null,
+      experiences: data.experiences || null,
+      projects: data.projects || null,
+      skills: data.skills || null,
+      driveUrl: data.driveUrl || null,
+      profilePhoto: data.profilePhoto || null,
+      projectPhotos: data.projectPhotos || {},
+    });
+  });
+
+  app.post('/api/content/personal-info', (req, res) => {
+    const { personalInfo } = req.body;
+    const siteData = loadSiteData();
+    siteData.personalInfo = personalInfo;
+    saveSiteData(siteData);
+    console.log('[Content] Personal info updated on server');
+    res.json({ success: true, personalInfo: siteData.personalInfo });
+  });
+
+  app.post('/api/content/experiences', (req, res) => {
+    const { experiences } = req.body;
+    const siteData = loadSiteData();
+    siteData.experiences = experiences;
+    saveSiteData(siteData);
+    console.log(`[Content] Experiences updated on server (${experiences?.length || 0} items)`);
+    res.json({ success: true, experiences: siteData.experiences });
+  });
+
+  app.post('/api/content/projects', (req, res) => {
+    const { projects } = req.body;
+    const siteData = loadSiteData();
+    siteData.projects = projects;
+    saveSiteData(siteData);
+    console.log('[Content] Projects updated on server');
+    res.json({ success: true, projects: siteData.projects });
+  });
+
+  app.post('/api/content/skills', (req, res) => {
+    const { skills } = req.body;
+    const siteData = loadSiteData();
+    siteData.skills = skills;
+    saveSiteData(siteData);
+    console.log('[Content] Skills updated on server');
+    res.json({ success: true, skills: siteData.skills });
+  });
+
+  app.post('/api/content/reset', (req, res) => {
+    const siteData = loadSiteData();
+    delete siteData.personalInfo;
+    delete siteData.experiences;
+    delete siteData.projects;
+    delete siteData.skills;
+    saveSiteData(siteData);
+    console.log('[Content] Content reset on server');
+    res.json({ success: true });
   });
 
   // --- Vite Dev or Static Production Serving ---
