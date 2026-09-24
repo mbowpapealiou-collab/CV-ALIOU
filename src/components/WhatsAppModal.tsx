@@ -46,11 +46,18 @@ export const WhatsAppModal: React.FC<WhatsAppModalProps> = ({ isOpen, onClose })
           
           <div className="flex items-center gap-3.5">
             <div className="relative">
-              <img
-                src={photoUrl}
-                alt="Aliou Mbow"
-                className="w-14 h-14 rounded-2xl object-cover object-top border-2 border-white/80 shadow-md"
-              />
+              {photoUrl ? (
+                <img
+                  src={photoUrl}
+                  alt="Aliou Mbow"
+                  className="w-14 h-14 rounded-2xl object-cover object-top border-2 border-white/80 shadow-md"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <div className="w-14 h-14 rounded-2xl bg-emerald-700/80 border-2 border-white/80 shadow-md flex items-center justify-center">
+                  <span className="text-lg font-black text-white">AM</span>
+                </div>
+              )}
               <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-slate-900 flex items-center justify-center" />
             </div>
             <div>

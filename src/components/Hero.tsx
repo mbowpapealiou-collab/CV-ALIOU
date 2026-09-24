@@ -114,11 +114,26 @@ export const Hero: React.FC<HeroProps> = ({
                 
                 {/* Photo showcase */}
                 <div className="relative w-full h-72 sm:h-80 rounded-2xl overflow-hidden mb-4 border border-orange-500/30 shadow-inner bg-slate-950 group">
-                  <img
-                    src={photoUrl}
-                    alt="Aliou Mbow"
-                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
-                  />
+                  {photoUrl ? (
+                    <img
+                      src={photoUrl}
+                      alt="Aliou Mbow"
+                      className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-slate-950 to-orange-950/40 p-6 text-center select-none">
+                      <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 p-1 shadow-xl shadow-orange-500/25 mb-3 flex items-center justify-center">
+                        <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center">
+                          <span className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
+                            AM
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-base font-bold text-white mb-0.5">Aliou Mbow</div>
+                      <div className="text-xs text-orange-400 font-medium">Management & Marketing Digital</div>
+                    </div>
+                  )}
                   
                   {/* Top badge */}
                   <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-slate-900/85 backdrop-blur-md border border-orange-500/40 text-amber-400 text-xs font-semibold flex items-center gap-1.5 shadow-sm">
@@ -126,11 +141,13 @@ export const Hero: React.FC<HeroProps> = ({
                     Profil Certifié
                   </div>
 
-                  {/* Name overlay */}
-                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-4">
-                    <div className="text-white font-bold text-lg sm:text-xl">Aliou Mbow</div>
-                    <div className="text-xs text-amber-300 font-medium">Management & Marketing Digital</div>
-                  </div>
+                  {/* Name overlay (displayed when photoUrl exists) */}
+                  {photoUrl && (
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent p-4">
+                      <div className="text-white font-bold text-lg sm:text-xl">Aliou Mbow</div>
+                      <div className="text-xs text-amber-300 font-medium">Management & Marketing Digital</div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Visitor Action Bar */}

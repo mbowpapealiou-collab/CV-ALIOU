@@ -73,11 +73,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           className="flex items-center gap-3 group cursor-pointer"
         >
           <div className="relative">
-            <img
-              src={photoUrl}
-              alt="Aliou Mbow"
-              className="w-11 h-11 rounded-full object-cover object-top ring-2 ring-orange-500/80 shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform"
-            />
+            {photoUrl ? (
+              <img
+                src={photoUrl}
+                alt="Aliou Mbow"
+                className="w-11 h-11 rounded-full object-cover object-top ring-2 ring-orange-500/80 shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 p-0.5 shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform flex items-center justify-center">
+                <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center">
+                  <span className="text-xs font-black text-amber-400">AM</span>
+                </div>
+              </div>
+            )}
             <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-slate-900 rounded-full" title="Disponible" />
           </div>
           <div>

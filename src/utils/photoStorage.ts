@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 const STORAGE_KEY = 'aliou_profile_photo';
 const EVENT_NAME = 'aliou_photo_updated';
-export const DEFAULT_PHOTO = '/photo.jpg';
+export const DEFAULT_PHOTO = '';
 
 // Shared backend URL in case the app is viewed through external static hosts (like Vercel or custom domain)
 const BACKEND_FALLBACK_URL = 'https://ais-pre-hbn74f6nh5h5hqlnlip7i6-905892281788.europe-west2.run.app';
@@ -31,21 +31,18 @@ let cachedProfilePhoto: string | null = null;
 const cachedProjectPhotos: Record<string, string> = {};
 
 export function getProfilePhoto(): string {
-  if (cachedProfilePhoto) {
+  if (cachedProfilePhoto !== null) {
     return cachedProfilePhoto;
   }
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (
-      saved &&
-      (saved.startsWith('data:image/') || saved.startsWith('/') || saved.startsWith('http'))
-    ) {
+    if (saved && (saved.startsWith('data:image/') || saved.startsWith('/') || saved.startsWith('http'))) {
       return saved;
     }
   } catch (err) {
     console.error('Erreur lecture photo localStorage', err);
   }
-  return DEFAULT_PHOTO;
+  return '';
 }
 
 export function saveProfilePhotoLocally(photoUrl: string): void {
@@ -96,9 +93,9 @@ export async function saveProfilePhoto(dataUrl: string): Promise<boolean> {
 
 export async function resetProfilePhoto(): Promise<void> {
   try {
-    cachedProfilePhoto = null;
+    cachedProfilePhoto = '';
     localStorage.removeItem(STORAGE_KEY);
-    window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: DEFAULT_PHOTO }));
+    window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: '' }));
 
     await fetchServerMedia('/api/media/reset-profile', { method: 'POST' });
   } catch (err) {
@@ -223,17 +220,9 @@ export async function syncMediaWithServer() {
         localStorage.setItem(STORAGE_KEY, data.profilePhoto);
         window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: data.profilePhoto }));
       } else {
-        // AUTO-SYNC: If server does not have a photo yet, but current browser has a custom photo uploaded previously by Aliou,
-        // automatically push it to the server so all other visitors instantly see it!
-        const localPhoto = localStorage.getItem(STORAGE_KEY);
-        if (localPhoto && localPhoto.startsWith('data:image/')) {
-          console.log('[Sync] Poussée automatique de la photo locale vers le serveur partagé...');
-          fetchServerMedia('/api/media/profile', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ photo: localPhoto }),
-          }).catch(() => {});
-        }
+        cachedProfilePhoto = '';
+        localStorage.removeItem(STORAGE_KEY);
+        window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: '' }));
       }
 
       // Sync project photos
@@ -300,30 +289,23 @@ export function useProjectPhotos() {
 
 export function useProfilePhoto() {
   const [photoUrl, setPhotoUrl] = useState<string>(() => getProfilePhoto());
-  const [isCustom, setIsCustom] = useState<boolean>(() => {
-    try {
-      const current = getProfilePhoto();
-      return Boolean(current && current !== DEFAULT_PHOTO);
-    } catch {
-      return false;
-    }
-  });
+  const [isCustom, setIsCustom] = useState<boolean>(() => Boolean(getProfilePhoto()));
 
   useEffect(() => {
     syncMediaWithServer();
 
     const handleUpdate = (e: Event) => {
       const customEvent = e as CustomEvent<string>;
-      const newUrl = customEvent.detail || getProfilePhoto();
+      const newUrl = customEvent.detail !== undefined ? customEvent.detail : getProfilePhoto();
       setPhotoUrl(newUrl);
-      setIsCustom(newUrl !== DEFAULT_PHOTO);
+      setIsCustom(Boolean(newUrl));
     };
 
     const handleStorage = (e: StorageEvent) => {
       if (e.key === STORAGE_KEY) {
         const newUrl = getProfilePhoto();
         setPhotoUrl(newUrl);
-        setIsCustom(newUrl !== DEFAULT_PHOTO);
+        setIsCustom(Boolean(newUrl));
       }
     };
 

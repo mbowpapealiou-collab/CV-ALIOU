@@ -1244,11 +1244,20 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
                     <div className="p-5 sm:p-6 rounded-3xl bg-slate-800/40 border border-slate-700/80 flex flex-col sm:flex-row items-center gap-6">
                       <div className="relative group shrink-0">
-                        <img
-                          src={photoUrl}
-                          alt="Photo de profil"
-                          className="w-32 h-32 rounded-full object-cover object-top border-4 border-orange-500/80 shadow-2xl ring-4 ring-orange-500/20"
-                        />
+                        {photoUrl ? (
+                          <img
+                            src={photoUrl}
+                            alt="Photo de profil"
+                            className="w-32 h-32 rounded-full object-cover object-top border-4 border-orange-500/80 shadow-2xl ring-4 ring-orange-500/20"
+                            referrerPolicy="no-referrer"
+                          />
+                        ) : (
+                          <div className="w-32 h-32 rounded-full bg-slate-900 border-4 border-dashed border-orange-500/50 flex flex-col items-center justify-center text-orange-400 shadow-xl">
+                            <User className="w-10 h-10 mb-1 text-orange-400/80" />
+                            <span className="text-[11px] font-semibold text-slate-300">Aucune photo</span>
+                            <span className="text-[9px] text-orange-400 mt-0.5">Prêt à téléverser</span>
+                          </div>
+                        )}
                         {isUploadingProfile && (
                           <div className="absolute inset-0 rounded-full bg-slate-950/80 flex flex-col items-center justify-center text-xs text-orange-400 font-bold">
                             <Clock className="w-5 h-5 animate-spin mb-1 text-orange-400" />
@@ -1258,9 +1267,18 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       </div>
 
                       <div className="space-y-3 flex-1 text-center sm:text-left">
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-semibold">
-                          <CheckCircle2 className="w-3 h-3" />
-                          <span>Photo actuelle synchronisée sur le serveur</span>
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-[11px] font-semibold">
+                          {photoUrl ? (
+                            <>
+                              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                              <span className="text-emerald-400">Photo enregistrée sur le serveur et visible par tous</span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                              <span className="text-amber-300">Aucune photo pour l'instant (initiales AM affichées)</span>
+                            </>
+                          )}
                         </div>
                         <h6 className="font-semibold text-white text-sm">
                           Sélectionnez une nouvelle photo de profil

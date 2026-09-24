@@ -128,11 +128,21 @@ export const CVModal: React.FC<CVModalProps> = ({
 
             {/* Photo with quick-change trigger */}
             <div className="relative shrink-0 group">
-              <img
-                src={photoUrl}
-                alt="Aliou Mbow"
-                className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover object-top border-2 border-orange-500 shadow-xl"
-              />
+              {photoUrl ? (
+                <img
+                  src={photoUrl}
+                  alt="Aliou Mbow"
+                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover object-top border-2 border-orange-500 shadow-xl"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-500 p-0.5 shadow-xl flex items-center justify-center">
+                  <div className="w-full h-full rounded-2xl bg-slate-950 flex flex-col items-center justify-center">
+                    <span className="text-2xl font-black text-amber-400">AM</span>
+                    <span className="text-[10px] text-slate-400 mt-0.5">Aliou Mbow</span>
+                  </div>
+                </div>
+              )}
               {isAdmin && (
                 <button
                   type="button"

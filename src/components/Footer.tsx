@@ -26,12 +26,20 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin, onOpenAdmin }) => {
           
           {/* Logo & Name with synchronized photo */}
           <div className="flex items-center gap-3">
-            <img
-              src={photoUrl}
-              alt="Aliou Mbow"
-              className="w-10 h-10 rounded-full object-cover object-top border-2 border-orange-500/60 shadow-sm"
-              referrerPolicy="no-referrer"
-            />
+            {photoUrl ? (
+              <img
+                src={photoUrl}
+                alt="Aliou Mbow"
+                className="w-10 h-10 rounded-full object-cover object-top border-2 border-orange-500/60 shadow-sm"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 p-0.5 shadow-sm flex items-center justify-center">
+                <div className="w-full h-full rounded-full bg-slate-950 flex items-center justify-center">
+                  <span className="text-[11px] font-black text-amber-400">AM</span>
+                </div>
+              </div>
+            )}
             <div>
               <span className="text-white font-semibold block text-sm">
                 {personalInfo.name}
@@ -42,9 +50,19 @@ export const Footer: React.FC<FooterProps> = ({ isAdmin, onOpenAdmin }) => {
             </div>
           </div>
 
-          {/* Copyright */}
-          <div className="text-xs text-slate-500 text-center">
+          {/* Copyright & Discreet Admin Access for Aliou */}
+          <div className="text-xs text-slate-500 text-center flex flex-col items-center justify-center gap-1.5">
             <span>© {new Date().getFullYear()} {personalInfo.name}. Management Informatisé des Organisations.</span>
+            {onOpenAdmin && (
+              <button
+                onClick={() => onOpenAdmin('photos')}
+                className="inline-flex items-center gap-1 text-slate-600 hover:text-orange-400 transition-colors cursor-pointer py-0.5 px-2 rounded hover:bg-slate-900 text-[11px]"
+                title="Espace Administrateur (Gestion des photos & contenus)"
+              >
+                <Shield className="w-3 h-3 text-orange-500/70" />
+                <span>Espace Admin</span>
+              </button>
+            )}
           </div>
 
           {/* Socials & Back to top */}

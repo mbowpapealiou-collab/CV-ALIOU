@@ -10,7 +10,7 @@ export const personalInfo = {
   linkedin: "https://linkedin.com/in/aliou-mbow-4b5ba7350",
   // Google Drive folder where Aliou stores all his project deliverables, presentations and reports
   googleDriveProjectsUrl: "https://drive.google.com/drive/folders/17Cq4kaG9C9S1aXyA0SLF7PC7p0xg8SO3?usp=drive_link",
-  photoUrl: "/photo.jpg",
+  photoUrl: "",
   availability: "À la recherche d'une opportunité en Management / Gestion / Marketing Digital",
   bio: "Étudiant en 3ème année de Management Informatisé des Organisations (MIO) à l'Université Iba Der Thiam de Thiès, à l'intersection du management, de l'informatique de gestion et de la communication numérique. Force de proposition, rigoureux et autonome, j'ai déjà mis en pratique mes compétences à travers le pilotage d'une activité commerciale et la création de contenu digital.",
   objective: "Intégrer une structure où je peux apprendre vite, contribuer à des projets concrets dès les premières semaines et prendre progressivement des responsabilités. Objectif à long terme : évoluer vers des fonctions de management et de gestion, avec une ambition de carrière vers la Direction Administrative et Financière.",
